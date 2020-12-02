@@ -1,0 +1,350 @@
+---
+title: 'College Majors Success Rates'
+author: "Ruth Raichur rr46673"
+date: '11/25/2020'
+output:
+  html_document:
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+hook_output = knit_hooks$get('output')
+knit_hooks$set(output = function(x, options) {
+  # this hook is used only when the linewidth option is not NULL
+  if (!is.null(n <- options$linewidth)) {
+    x = knitr:::split_lines(x)
+    # any lines wider than n should be wrapped
+    if (any(nchar(x) > n)) x = strwrap(x, width = n)
+    x = paste(x, collapse = '\n')
+  }
+  hook_output(x, options)
+})
+
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE,fig.align="center",warning=FALSE,message=FALSE,fig.width=8, fig.height=5, linewidth=60)
+options(tibble.width = 100,width = 100)
+library(tidyverse)
+
+#class_diags function
+class_diag<-function(probs,truth){
+  tab<-table(factor(probs>.5,levels=c("FALSE","TRUE")),truth)
+  acc=sum(diag(tab))/sum(tab)
+  sens=tab[2,2]/colSums(tab)[2]
+  spec=tab[1,1]/colSums(tab)[1]
+  ppv=tab[2,2]/rowSums(tab)[2]
+  f1=2*(sens*ppv)/(sens+ppv)
+
+  if(is.numeric(truth)==FALSE & is.logical(truth)==FALSE){
+    truth<-as.numeric(truth)-1}
+  
+  #CALCULATE EXACT AUC
+  ord<-order(probs, decreasing=TRUE)
+  probs <- probs[ord]; truth <- truth[ord]
+  
+  TPR=cumsum(truth)/max(1,sum(truth)) 
+  FPR=cumsum(!truth)/max(1,sum(!truth))
+  
+  dup<-c(probs[-1]>=probs[-length(probs)], FALSE)
+  TPR<-c(0,TPR[!dup],1); FPR<-c(0,FPR[!dup],1)
+  
+  n <- length(TPR)
+  auc<- sum( ((TPR[-1]+TPR[-n])/2) * (FPR[-1]-FPR[-n]) )
+
+  data.frame(acc,sens,spec,ppv,f1,auc)
+} 
+```
+
+## Project 2: Modeling, Testing, and Predicting
+
+### Majors Dataset
+```{r}
+majors <- read_csv("https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/recent-grads.csv")
+level_key <- c("Computers & Mathematics" ="Natural Sciences", "Engineering" = "Natural Sciences", "Industrial Arts & Consumer Services" = "Business", "Biology & Life Science" = "Natural Sciences", "Agriculture & Natural Resources" = "Natural Sciences", "Physical Sciences"= "Natural Sciences", "Health" = "Natural Sciences", "Social Science" = "Liberal Arts", "Humanities & Liberal Arts" = "Liberal Arts", "Psychology & Social Work" = "Liberal Arts", "Education" = "Liberal Arts", "Law & Public Policy" = "Liberal Arts", "Arts" = "Communication", "Communications & Journalism" = "Communication")
+
+majors <- majors%>% select(Rank, Major, Total, Men, Women, Major_category, ShareWomen, Employed, Unemployed, Unemployment_rate) %>% mutate(MoreWomen = ifelse(ShareWomen > 0.5,1,0)) %>% mutate(MajorCategory = recode(Major_category, !!!level_key)) %>% select(-Major_category) %>% na.omit() 
+majors <- majors[majors$MajorCategory != "Interdisciplinary", ]  
+```
+The majors dataset tracks the success of college majors after graduating from a four-year undergraduate degree program. This was collected from the American Community Survey 2010-2012 Public Use Microdata Series. It contains details about recent college graduates (below the age of 28) who completed their education at the undergraduate degree level. This dataset ranks the major by median earnings and lists the population of men and women as well as a "share women" variable that describes women as a share of the total number of students in each major (proportion). The data also categorizes each major into it's general category based on Carnevale et al. To reduce the number of categories since there were 16, I grouped the data further to reduce them to 4 by combining majors into much broader categories: Natural Science, Business, Communications, and Liberal Arts. Finally, the data lists the number of Employed and Unemployed in addition to an unemployment rate for each major. Since the data did not already have a binary variable, I created one called "MoreWomen" that categorizes the major based on whether their ShareWomen was greater that 50%, this would indicate whether the major was more populated by women. The final dataset consisted of 171 majors (observations) listed under 4 major categories.
+
+### MANOVA
+
+```{r}
+#MANOVA 
+
+#Hypothesis: 
+
+#h0 = for all major categories, the mean unemployment rates, employed, and ShareWomen rate are the same 
+
+#hA = for at least one major category, the mean unemployment rates, employed, and ShareWomen rate are not the same
+
+#Assumptions:
+library(rstatix)
+
+group <- majors$MajorCategory
+DVs <- majors %>% select(ShareWomen, Employed, Unemployment_rate)
+
+#Test multivariate normality for each group (null: assumption met)
+sapply(split(DVs,group), mshapiro_test)
+#violated normality
+
+#MANOVA test:
+manova(cbind(ShareWomen,Employed, Unemployment_rate)~MajorCategory,data=majors) -> man1
+summary(man1) #significant p-value obtained (F = 7.4425, Df =  9,501, p = 3.084e-10)
+
+#follow-up ANOVA:
+summary.aov(man1) #for all major categories, there is atleast one difference 
+
+#pairwise t-test for elements 
+pairwise.t.test(majors$ShareWomen,majors$MajorCategory, p.adj="none")
+pairwise.t.test(majors$Employed,majors$MajorCategory, p.adj="none")
+pairwise.t.test(majors$Unemployment_rate,majors$MajorCategory, p.adj="none")
+
+#total: 1 MANOVA + 3 ANOVAS + 18 t-tests = 22
+
+#probability of type 1 error:
+1-(0.95^22) 
+
+#bonferroni correction
+0.05/22 #new sig level
+```
+The MANOVA performed tested whether there were mean differences in unemployment rates, the number of graduates employed, and the "share women" rate across the four different major categories. While the dataset violated the normality assumption when a Shapiro-Wilk test was performed (all categories yielded a p-value < 0.05), I proceeded with the MANOVA test. The test revealed significant differences across major categories for all variables being tested (F = 7.4425, Df =  (9, 501), p = 3.084e-10). Given this result, follow up univariate ANOVAs were performed on all variables for each of the major categories. All variables were significant with the following p-values, ShareWomen = 2.27e-09, Employed = 0.0007383, Unemployment_rate = 0.02626. 
+
+After adjusting the significance value with the Bonferroni correction to obtain a new significance value of 0.002, given 22 tests run in total, a post hoc analysis revealed significant differences primarly among the "Share Woman" variable. Under this variable, a signifcant difference in mean population of women were noticed when comparing Liberal Arts and Business majors (p = 3.0e-05), and Liberal Arts and Natural Sciences (p = 7.3e-10). In addition, there was a significant difference in the number of employed graduates between Business and Natural Science majors (p=0.00022). Finally, the probability of a type I error with 22 tests run was 0.676.
+
+### Randomization test
+
+```{r}
+#randomization test comparing mean difference between unemployment rates in major that have over 50% women
+
+#hypothesis:
+
+#h0: mean diff = 0
+
+#hA: mean diff not equal to 0
+
+#test stat
+majors %>% group_by(MoreWomen) %>% summarize(means = mean(Unemployment_rate)) %>% summarize(diff = diff(means)) -> mean_diff
+mean_diff
+
+set.seed(123)
+rand_majors<-vector() 
+
+for(i in 1:5000){
+new<-data.frame(rates=sample(majors$Unemployment_rate),condition=majors$MoreWomen) 
+rand_majors[i]<-mean(new[new$condition==0,]$rates)-   
+              mean(new[new$condition==1,]$rates)} 
+
+#two tailed p values when diff is not equal to 0
+mean(rand_majors>0.000468|rand_majors< -0.000468)
+
+#plot
+data.frame(rand_majors)%>%
+ggplot(aes(rand_majors))+geom_histogram(aes(y=..density..), bins=40)+geom_vline(xintercept=c(0.000468, -0.000468), color = "red")
+
+```
+A randomization test was used to evaluate the mean difference of unemployment rates between majors that had over 50% women compared to the majors that didn't. The null hypothesis was that there would be no diffence in mean unemployement rate between the two groups of majors and the alternative was that the unemployment rates would differ among majors that had more women compared to those that didn't. The observed mean difference of the unemployment rates between the two groups was 0.000468, this was treated as the test-statistic.
+
+The p-value obtained after the randomization test was 0.924. Since this value is much greater than the significant value of 0.05, the null hypothesis failed to be rejected which suggests that there was no difference in unemployment rates between the majors that had over 50% women graduates. The plot concurs with this conclusion since the test statistic appears to be very close to the center of the null distribution.
+
+### Linear regression model 
+```{r}
+#linear regression
+majorfit <- lm(Unemployment_rate~Men*Women*MajorCategory, data = majors)
+summary(majorfit)
+
+#ggplot
+majors %>% ggplot(aes(y=Unemployment_rate, x=Women, color = MajorCategory))+geom_point()+geom_smooth(method="lm")
+
+#assumptions
+#linearity
+resids<-majorfit$residuals
+fitvals<-majorfit$fitted.values
+plot(fitvals,resids); abline(h=0, col='red')
+
+#normality
+ks.test(resids, "pnorm", mean=0, sd(resids)) #Ho: true distribution is normal
+
+#homoskedasticity
+library(lmtest)
+library(sandwich)
+bptest(majorfit) #H0: homoskedastic
+
+#recompute regression
+coeftest(majorfit, vcov = vcovHC(majorfit))
+
+```
+The linear regression model predicts the unemployment rate for the number of men, women and majors in the Business category to be 6.036e-02 (p=1.48e-08). Controlling for major category and number of women, with every one addition of a male graduate, there is a 3.048e-08 unit increase in unemployment rate (p=0.942). Controlling major category and number of men, with every one addition of a female graduate, there is a 5.145e-08 unit increase in unemployment rate (p=0.890). Controlling for number of men and women, the unemployment rate for majors in communication is 3.287e-02 times higher than majors in business (p=0.165). Controlling for number of men and women, the unemployment rate for majors in liberal arts is 1.273e-02 times higher than majors in business (p=0.273). Controlling for number of men and women, the unemployment rate for majors in the natural sciences is 1.644e-03 times higher than majors in business (p= 0.881). 
+
+The interpretations for interactions that make sense are as follows:
+
+Controlling for the number of women, the slope for the number of men on unemployment rate is  1.961e-07 times higher for communication majors compared to business majors (p=0.895). Controlling for the number women, the slope for the number of men on unemployment rate is 3.573e-07 times higher for liberal arts majors compared to business majors (p= 0.468). Controlling for the number of women, the slope for the number men on unemployment rate is 8.113e-08 times higher for natural sciences majors compared to business majors (p=0.864).
+
+Controlling for the number of men, the slope for the number of women on unemployment rate is 4.813e-07 times lower for communication majors compared to business majors (p=0.605). Controlling for the number men, the slope for the number of women on unemployment rate is 2.017e-12 times lower for liberal arts majors compared to business majors (p=0.482). Controlling for the number of men, the slope for the number of women on unemployment rate is 9.393e-08 times lower for natural science majors compared to business majors (p=0.823). 
+
+The slope for the number of men and women on unemployment rate is 3.057e-12 times higher for communication majors compared to business majors (p=0.784). The slope for the number of men and women on unemployment rate is 2.0170e-12 times higher for liberal arts majors compared to business majors (p=0.639). The slope for the number men on unemployment rate is 7.427e-14 times higher for natural sciences majors compared to business majors (p=0.987).
+
+Based on the plot, the linearity assumption was not met since there appeared to be obvious funneling. A Kolmogorov–Smirnov test was used to assess normality. The p-value for this test was 0.2363. Since it is greater than the significance level of 0.05, the null hypothesis was not rejected which suggests that the data passed the normality assumption. The homoskedasticity assumption was met since the p-value of the test was 0.2267, failing to reject the null hypothesis.
+
+The regression results computed using robust standard errors with the 'coeftest' yielded similar estimates as the linear regression. The only significant value was still the intercept. The most obvious changes were the SEs between the original and the robust results. There is a reduction by almost 50% between the original SEs and the robust SEs for all variables except the intercept, where the opposite trend is observed. The change in the SEs is also reflected in the change in p-values which are also reduced in the robust test compared to the original for most variable. The proportion of variation that the model explains was determined by the R-squared value, 0.08793. This means that 8.793% of the variation in the outcome is explained by this model.
+
+### Bootstrap SE 
+```{r}
+set.seed(123)
+
+#bootstrap standard error by resampling residuals
+  resids<-majorfit$residuals #save residuals
+  fitted<-majorfit$fitted.values #save yhats/predictions
+  
+  resid_resamp<-replicate(5000,{
+    new_resids<-sample(resids,replace=TRUE) #resample resids w/ replacement
+    majors$new_y<-fitted+new_resids #add new resids to yhats to get new "data"
+    fit1<-lm(new_y~Men*Women*MajorCategory, data=majors) #refit model
+    coef(fit1) #save coefficient estimates (b0, b1, etc)
+})
+  ## Estimated SEs
+resid_resamp%>%t%>%as.data.frame%>%summarize_all(sd)
+
+## Empirical 95% CI
+resid_resamp%>%t%>%as.data.frame%>%pivot_longer(1:16)%>%group_by(name)%>%
+ summarize(lower=quantile(value,.025), upper=quantile(value,.975))
+```
+The bootstrap SEs compared to the original SEs pretty much stayed the same. Men changed from 4.199e-07 to 4.050982e-07, women changed from 3.708e-07 to 3.585925e-07, communication major changed from 2.359e-02 to 0.02249897, liberal arts majors changed from 1.158e-02 to 0.01094157, natural sciences changed from 1.093e-02 to 0.0103524. With interactions following the similar trend of bootstrap SEs being lower than the original SEs. This trend can also be used to determine the change in p-values compared to the original. The p-values of the bootstrap SEs are predicted to be slightly lower than those of the original SEs.
+
+When comparing bootstrap SEs to the robust SEs, the same conclusion made in the previous section can be drawn since the original SEs and bootstrap SEs are very similar. There is an observed, almost 50%, decrease in the robust SEs compared to the bootstrap SE for all except the intercept where the reverse occurs. Since this trend can be extrapolated to make a conclusion about p-values. The p-values of the bootstrap SEs are predicted to be higher than those of the robust SEs, for most cases.
+
+All estimates for the variables and their interactions were not significant since zero lies within the 95% confidence intervals. Similar to the previous model, based on the confidence intervals, only the intercept was significant. 
+
+### Logistic regression model
+```{r}
+#logistic regression model
+majorlogfit<-glm(MoreWomen~MajorCategory+Employed+Unemployment_rate,data=majors, family="binomial")
+summary(majorlogfit)
+exp(coef(majorlogfit))
+
+#confusion matrix
+probs<-predict(majorlogfit,type="response")
+table(predict=as.numeric(probs>0.5),truth=majors$MoreWomen)%>%addmargins
+
+#accuracy, sensitivity (TPR), specificity (TNR), precision (PPV), auc
+class_diag(probs,majors$MoreWomen)
+
+#ggplot
+majors$logit<-predict(majorlogfit,type="link")
+majors%>%ggplot()+geom_density(aes(logit,color=MoreWomen,fill=MoreWomen), alpha=.4)+
+  theme(legend.position=c(.85,.85))+geom_vline(xintercept=0)+xlab("logit (log-odds)")+
+  geom_rug(aes(logit,color=MoreWomen))
+
+#ROC
+library(plotROC)
+ROCplot<-ggplot(majorlogfit)+geom_roc(aes(d=MoreWomen,m=probs), n.cuts=0) 
+ROCplot
+
+calc_auc(ROCplot)
+```
+The binary variable created separated majors by the population of women majority using the "Share Women" variable (proportion over 50% and under 50%). The odds of majority female for majors in business, Employed = 0, Unemployment_rate = 0 is 0.937 (p=0.917). Controlling for number employed and Unemployement rate, the odds of having a women majority in a communication major is 9.174 times the odds of women majority in business majors (p=0.015, significant). Controlling for number employed and Unemployement rate, the odds of having a women majority in a liberal arts major is 6.159 times the odds of women majority in business majors (p=0.002, significant). Controlling for number employed and Unemployement rate, the odds of having a women majority in a natural science major is  1.145 times the odds of women majority in business majors (p=0.801, not significant). Controlling for major category and unemployment rate, for every one person increase in employed number, the odds of having a women majority increases by a factor of 1 (p=0.584, not significant). Controlling for major category and number employed, for every one unit increase in unemployment rate, the odds of having a women majority increases by a factor of 0.000580 (p=0.193, not significant). 
+
+The accuracy of the model is 0.661, which means only 66.1% of majors were accurately classified in the right women proportion group. The sensitivity was 0.564 which is the proportion of majors that were correctly classified in the majority women group. The specificity was 0.776 which is the proportion of majors that were correctly classified in the minority women group, the model does a better job at prediciting the majors in which women are a minority. The precision was 0.761 which is the proportion of majors that were classified in the majority women group that were actually in that group, this is a decently high. The AUC of the ROC curve is 0.702 which classifies this model as fair.
+
+### CV and LASSO 
+```{r}
+#logistic regression model
+majors1 <- majors %>% select(-Major, -logit, -ShareWomen, -Women, -Men) #take out variables that contribute to the binary factor created in section 0 and ones that don't make sense 
+
+majorlogfitall<-glm(MoreWomen~.,data=majors1, family="binomial")
+summary(majorlogfitall)
+exp(coef(majorlogfitall))
+
+#Accuracy, Sensitivity, Specificity, Precision, AUC
+probs1<-predict(majorlogfitall,type="response")
+class_diag(probs1,majors1$MoreWomen)
+
+#CV with same model
+set.seed(123)
+k=10
+
+data <- majors1 %>% sample_frac #put rows of dataset in random order
+folds <- ntile(1:nrow(data),n=10) #create fold labels
+
+diags<-NULL
+for(i in 1:k){
+  train <- data[folds!=i,] #create training set (all but fold i)
+  test <- data[folds==i,] #create test set (just fold i)
+  truth <- test$MoreWomen #save truth labels from fold i
+  
+  fit <- glm(MoreWomen~., data=train, family="binomial")
+  probs2 <- predict(fit, newdata=test, type="response")
+  
+  diags<-rbind(diags,class_diag(probs2,truth))
+}
+
+summarize_all(diags,mean)
+
+#LASSO
+library(glmnet)
+set.seed(123)
+
+major_resps<-as.matrix(majors1$MoreWomen) #grab response
+major_preds<-model.matrix(MoreWomen~.,data=majors1)[,-1] #predictors (drop intercept)
+
+cv <- cv.glmnet(major_preds,major_resps, family="binomial") #picks an optimal value for lambda through 10-fold
+lasso_fit<-glmnet(major_preds,major_resps,lambda=cv$lambda.1se, family="binomial")
+coef(lasso_fit)
+
+probs3 <- predict(lasso_fit, major_preds, type="response")
+class_diag(probs3, majors1$MoreWomen)
+table(predict=as.numeric(probs3>.5),truth=majors1$MoreWomen)%>%addmargins
+
+#CV with lasso
+set.seed(123)
+k=10
+
+data <- majors1 %>% sample_frac #put rows of dataset in random order
+folds <- ntile(1:nrow(data),n=10) #create fold labels
+
+diags<-NULL
+for(i in 1:k){
+  train <- data[folds!=i,] #create training set (all but fold i)
+  test <- data[folds==i,] #create test set (just fold i)
+  truth <- test$MoreWomen #save truth labels from fold i
+  
+  fit <- glm(MoreWomen~Rank, data=train, family="binomial")
+  probs4 <- predict(fit, newdata=test, type="response")
+  
+  diags<-rbind(diags,class_diag(probs4,truth))
+}
+
+summarize_all(diags,mean)
+
+
+
+```
+- In-sample classification diagnostics:
+
+    - Accuracy: 0.795, 79.5% of majors were accurately classified in the right women proportion group in this model
+    - Sensitivity: 0.8, 80% of majors were correctly classified in the majority women group
+    - Specificity: 0.789, 78.9% of majors were correctly classified in the minority women group
+    - Precision: 0.813, 81.3% of majors were classified in the majority women group that were actually in that group
+    - AUC: 0.869
+    
+The AUC shows that this model is good at predicting the women classification, doing a better job at predicting the majority women group but not by much. 
+
+- Out-of-Sample classification diagnostics:
+
+    - Accuracy: 0.753, 75.3% of majors were accurately classified in the right women proportion group in this model
+    - Sensitivity: 0.767, 76.7% of majors were correctly classified in the majority women group
+    - Specificity: 0.755, 75.5% of majors were correctly classified in the minority women group
+    - Precision: 0.801, 80.1% of majors were classified in the majority women group that were actually in that group
+    - AUC: 0.821
+    
+The AUC shows that this model is good at predicting the women classification, doing a better job at predicting the majority women group but not by much. While the AUC of this model is in the same classification as the in-sample model, it is lower (0.821 compared to 0.869). 
+
+After performing a LASSO on the same model, only the Rank variable was non-zero. Using just this retained variable, the AUC of this model is 0.848 which is greater than the out-of-sample AUC of the previous model but less than the in-sample AUC, suggesting some over-fitting. This change, however, does not change the model classification as all three models run remain classified as good.
+
+...
+
+
+
+

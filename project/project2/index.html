@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Ruth Raichur" />
+    <meta name="description" content="Describe your website">
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico">
+    <title>College Majors Success Rates</title>
+    <meta name="generator" content="Hugo 0.79.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="/post/">BLOG</a></li>
+        
+        <li><a href="/projects/">PROJECTS</a></li>
+        
+        <li><a href="/resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="/project/project2/">College Majors Success Rates</a></strong>
+          </h3>
+        </div>
+        <div class="blog-title">
+          <h4>
+          January 1, 0001 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<div id="project-2-modeling-testing-and-predicting" class="section level2">
+<h2>Project 2: Modeling, Testing, and Predicting</h2>
+<div id="majors-dataset" class="section level3">
+<h3>Majors Dataset</h3>
+<pre class="r"><code>majors &lt;- read_csv(&quot;https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/recent-grads.csv&quot;)
+level_key &lt;- c(&quot;Computers &amp; Mathematics&quot; =&quot;Natural Sciences&quot;, &quot;Engineering&quot; = &quot;Natural Sciences&quot;, &quot;Industrial Arts &amp; Consumer Services&quot; = &quot;Business&quot;, &quot;Biology &amp; Life Science&quot; = &quot;Natural Sciences&quot;, &quot;Agriculture &amp; Natural Resources&quot; = &quot;Natural Sciences&quot;, &quot;Physical Sciences&quot;= &quot;Natural Sciences&quot;, &quot;Health&quot; = &quot;Natural Sciences&quot;, &quot;Social Science&quot; = &quot;Liberal Arts&quot;, &quot;Humanities &amp; Liberal Arts&quot; = &quot;Liberal Arts&quot;, &quot;Psychology &amp; Social Work&quot; = &quot;Liberal Arts&quot;, &quot;Education&quot; = &quot;Liberal Arts&quot;, &quot;Law &amp; Public Policy&quot; = &quot;Liberal Arts&quot;, &quot;Arts&quot; = &quot;Communication&quot;, &quot;Communications &amp; Journalism&quot; = &quot;Communication&quot;)
+
+majors &lt;- majors%&gt;% select(Rank, Major, Total, Men, Women, Major_category, ShareWomen, Employed, Unemployed, Unemployment_rate) %&gt;% mutate(MoreWomen = ifelse(ShareWomen &gt; 0.5,1,0)) %&gt;% mutate(MajorCategory = recode(Major_category, !!!level_key)) %&gt;% select(-Major_category) %&gt;% na.omit() 
+majors &lt;- majors[majors$MajorCategory != &quot;Interdisciplinary&quot;, ]  </code></pre>
+<p>The majors dataset tracks the success of college majors after graduating from a four-year undergraduate degree program. This was collected from the American Community Survey 2010-2012 Public Use Microdata Series. It contains details about recent college graduates (below the age of 28) who completed their education at the undergraduate degree level. This dataset ranks the major by median earnings and lists the population of men and women as well as a “share women” variable that describes women as a share of the total number of students in each major (proportion). The data also categorizes each major into it’s general category based on Carnevale et al. To reduce the number of categories since there were 16, I grouped the data further to reduce them to 4 by combining majors into much broader categories: Natural Science, Business, Communications, and Liberal Arts. Finally, the data lists the number of Employed and Unemployed in addition to an unemployment rate for each major. Since the data did not already have a binary variable, I created one called “MoreWomen” that categorizes the major based on whether their ShareWomen was greater that 50%, this would indicate whether the major was more populated by women. The final dataset consisted of 171 majors (observations) listed under 4 major categories.</p>
+</div>
+<div id="manova" class="section level3">
+<h3>MANOVA</h3>
+<pre class="r"><code>#MANOVA 
+
+#Hypothesis: 
+
+#h0 = for all major categories, the mean unemployment rates, employed, and ShareWomen rate are the same 
+
+#hA = for at least one major category, the mean unemployment rates, employed, and ShareWomen rate are not the same
+
+#Assumptions:
+library(rstatix)
+
+group &lt;- majors$MajorCategory
+DVs &lt;- majors %&gt;% select(ShareWomen, Employed, Unemployment_rate)
+
+#Test multivariate normality for each group (null: assumption met)
+sapply(split(DVs,group), mshapiro_test)</code></pre>
+<pre><code>## Business Communication Liberal Arts Natural Sciences
+## statistic 0.8956128 0.7697067 0.6593816 0.6447465
+## p.value 0.03415011 0.004325978 6.294575e-10 4.958085e-13</code></pre>
+<pre class="r"><code>#violated normality
+
+#MANOVA test:
+manova(cbind(ShareWomen,Employed, Unemployment_rate)~MajorCategory,data=majors) -&gt; man1
+summary(man1) #significant p-value obtained (F = 7.4425, Df =  9,501, p = 3.084e-10)</code></pre>
+<pre><code>## Df Pillai approx F num Df den Df Pr(&gt;F)
+## MajorCategory 3 0.35379 7.4425 9 501 3.084e-10 ***
+## Residuals 167
+## ---
+## Signif. codes: 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1
+&#39; &#39; 1</code></pre>
+<pre class="r"><code>#follow-up ANOVA:
+summary.aov(man1) #for all major categories, there is atleast one difference </code></pre>
+<pre><code>## Response ShareWomen :
+## Df Sum Sq Mean Sq F value Pr(&gt;F)
+## MajorCategory 3 2.0626 0.68753 16.365 2.27e-09 ***
+## Residuals 167 7.0161 0.04201
+## ---
+## Signif. codes: 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1
+&#39; &#39; 1
+##
+## Response Employed :
+## Df Sum Sq Mean Sq F value Pr(&gt;F)
+## MajorCategory 3 4.2289e+10 1.4096e+10 5.9127 0.0007383
+***
+## Residuals 167 3.9814e+11 2.3841e+09
+## ---
+## Signif. codes: 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1
+&#39; &#39; 1
+##
+## Response Unemployment_rate :
+## Df Sum Sq Mean Sq F value Pr(&gt;F)
+## MajorCategory 3 0.008448 0.0028159 3.1572 0.02626 *
+## Residuals 167 0.148948 0.0008919
+## ---
+## Signif. codes: 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1
+&#39; &#39; 1</code></pre>
+<pre class="r"><code>#pairwise t-test for elements 
+pairwise.t.test(majors$ShareWomen,majors$MajorCategory, p.adj=&quot;none&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  majors$ShareWomen and majors$MajorCategory 
+## 
+##                  Business Communication Liberal Arts
+## Communication    0.0142   -             -           
+## Liberal Arts     3.0e-05  0.4936        -           
+## Natural Sciences 0.9557   0.0033        7.3e-10     
+## 
+## P value adjustment method: none</code></pre>
+<pre class="r"><code>pairwise.t.test(majors$Employed,majors$MajorCategory, p.adj=&quot;none&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  majors$Employed and majors$MajorCategory 
+## 
+##                  Business Communication Liberal Arts
+## Communication    0.49036  -             -           
+## Liberal Arts     0.03122  0.32312       -           
+## Natural Sciences 0.00022  0.02747       0.03513     
+## 
+## P value adjustment method: none</code></pre>
+<pre class="r"><code>pairwise.t.test(majors$Unemployment_rate,majors$MajorCategory, p.adj=&quot;none&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  majors$Unemployment_rate and majors$MajorCategory 
+## 
+##                  Business Communication Liberal Arts
+## Communication    0.043    -             -           
+## Liberal Arts     0.155    0.246         -           
+## Natural Sciences 0.978    0.016         0.030       
+## 
+## P value adjustment method: none</code></pre>
+<pre class="r"><code>#total: 1 MANOVA + 3 ANOVAS + 18 t-tests = 22
+
+#probability of type 1 error:
+1-(0.95^22) </code></pre>
+<pre><code>## [1] 0.6764665</code></pre>
+<pre class="r"><code>#bonferroni correction
+0.05/22 #new sig level</code></pre>
+<pre><code>## [1] 0.002272727</code></pre>
+<p>The MANOVA performed tested whether there were mean differences in unemployment rates, the number of graduates employed, and the “share women” rate across the four different major categories. While the dataset violated the normality assumption when a Shapiro-Wilk test was performed (all categories yielded a p-value &lt; 0.05), I proceeded with the MANOVA test. The test revealed significant differences across major categories for all variables being tested (F = 7.4425, Df = (9, 501), p = 3.084e-10). Given this result, follow up univariate ANOVAs were performed on all variables for each of the major categories. All variables were significant with the following p-values, ShareWomen = 2.27e-09, Employed = 0.0007383, Unemployment_rate = 0.02626.</p>
+<p>After adjusting the significance value with the Bonferroni correction to obtain a new significance value of 0.002, given 22 tests run in total, a post hoc analysis revealed significant differences primarly among the “Share Woman” variable. Under this variable, a signifcant difference in mean population of women were noticed when comparing Liberal Arts and Business majors (p = 3.0e-05), and Liberal Arts and Natural Sciences (p = 7.3e-10). In addition, there was a significant difference in the number of employed graduates between Business and Natural Science majors (p=0.00022). Finally, the probability of a type I error with 22 tests run was 0.676.</p>
+</div>
+<div id="randomization-test" class="section level3">
+<h3>Randomization test</h3>
+<pre class="r"><code>#randomization test comparing mean difference between unemployment rates in major that have over 50% women
+
+#hypothesis:
+
+#h0: mean diff = 0
+
+#hA: mean diff not equal to 0
+
+#test stat
+majors %&gt;% group_by(MoreWomen) %&gt;% summarize(means = mean(Unemployment_rate)) %&gt;% summarize(diff = diff(means)) -&gt; mean_diff
+mean_diff</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##        diff
+##       &lt;dbl&gt;
+## 1 -0.000468</code></pre>
+<pre class="r"><code>set.seed(123)
+rand_majors&lt;-vector() 
+
+for(i in 1:5000){
+new&lt;-data.frame(rates=sample(majors$Unemployment_rate),condition=majors$MoreWomen) 
+rand_majors[i]&lt;-mean(new[new$condition==0,]$rates)-   
+              mean(new[new$condition==1,]$rates)} 
+
+#two tailed p values when diff is not equal to 0
+mean(rand_majors&gt;0.000468|rand_majors&lt; -0.000468)</code></pre>
+<pre><code>## [1] 0.924</code></pre>
+<pre class="r"><code>#plot
+data.frame(rand_majors)%&gt;%
+ggplot(aes(rand_majors))+geom_histogram(aes(y=..density..), bins=40)+geom_vline(xintercept=c(0.000468, -0.000468), color = &quot;red&quot;)</code></pre>
+<p><img src="/project/project2_files/figure-html/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;" />
+A randomization test was used to evaluate the mean difference of unemployment rates between majors that had over 50% women compared to the majors that didn’t. The null hypothesis was that there would be no diffence in mean unemployement rate between the two groups of majors and the alternative was that the unemployment rates would differ among majors that had more women compared to those that didn’t. The observed mean difference of the unemployment rates between the two groups was 0.000468, this was treated as the test-statistic.</p>
+<p>The p-value obtained after the randomization test was 0.924. Since this value is much greater than the significant value of 0.05, the null hypothesis failed to be rejected which suggests that there was no difference in unemployment rates between the majors that had over 50% women graduates. The plot concurs with this conclusion since the test statistic appears to be very close to the center of the null distribution.</p>
+</div>
+<div id="linear-regression-model" class="section level3">
+<h3>Linear regression model</h3>
+<pre class="r"><code>#linear regression
+majorfit &lt;- lm(Unemployment_rate~Men*Women*MajorCategory, data = majors)
+summary(majorfit)</code></pre>
+<pre><code>##
+## Call:
+## lm(formula = Unemployment_rate ~ Men * Women *
+MajorCategory,
+## data = majors)
+##
+## Residuals:
+## Min 1Q Median 3Q Max
+## -0.073074 -0.014546 -0.002055 0.014363 0.114992
+##
+## Coefficients:
+## Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept) 6.036e-02 1.009e-02 5.980 1.48e-08 ***
+## Men 3.048e-08 4.199e-07 0.073 0.942
+## Women 5.145e-08 3.708e-07 0.139 0.890
+## MajorCategoryCommunication 3.287e-02 2.359e-02 1.394
+0.165
+## MajorCategoryLiberal Arts 1.273e-02 1.158e-02 1.099
+0.273
+## MajorCategoryNatural Sciences 1.644e-03 1.093e-02 0.150
+0.881
+## Men:Women -1.316e-13 3.352e-12 -0.039 0.969
+## Men:MajorCategoryCommunication 1.961e-07 1.477e-06 0.133
+0.895
+## Men:MajorCategoryLiberal Arts 3.573e-07 4.910e-07 0.728
+0.468
+## Men:MajorCategoryNatural Sciences 8.113e-08 4.745e-07
+0.171 0.864
+## Women:MajorCategoryCommunication -4.813e-07 9.280e-07
+-0.519 0.605
+## Women:MajorCategoryLiberal Arts -2.913e-07 4.137e-07
+-0.704 0.482
+## Women:MajorCategoryNatural Sciences -9.393e-08 4.181e-07
+-0.225 0.823
+## Men:Women:MajorCategoryCommunication 3.057e-12 1.115e-11
+0.274 0.784
+## Men:Women:MajorCategoryLiberal Arts 2.017e-12 4.285e-12
+0.471 0.639
+## Men:Women:MajorCategoryNatural Sciences 7.427e-14
+4.447e-12 0.017 0.987
+## ---
+## Signif. codes: 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1
+&#39; &#39; 1
+##
+## Residual standard error: 0.03043 on 155 degrees of
+freedom
+## Multiple R-squared: 0.08793, Adjusted R-squared:
+-0.0003391
+## F-statistic: 0.9962 on 15 and 155 DF, p-value: 0.462</code></pre>
+<pre class="r"><code>#ggplot
+majors %&gt;% ggplot(aes(y=Unemployment_rate, x=Women, color = MajorCategory))+geom_point()+geom_smooth(method=&quot;lm&quot;)</code></pre>
+<p><img src="/project/project2_files/figure-html/unnamed-chunk-4-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#assumptions
+#linearity
+resids&lt;-majorfit$residuals
+fitvals&lt;-majorfit$fitted.values
+plot(fitvals,resids); abline(h=0, col=&#39;red&#39;)</code></pre>
+<p><img src="/project/project2_files/figure-html/unnamed-chunk-4-2.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#normality
+ks.test(resids, &quot;pnorm&quot;, mean=0, sd(resids)) #Ho: true distribution is normal</code></pre>
+<pre><code>## 
+##  One-sample Kolmogorov-Smirnov test
+## 
+## data:  resids
+## D = 0.078998, p-value = 0.2363
+## alternative hypothesis: two-sided</code></pre>
+<pre class="r"><code>#homoskedasticity
+library(lmtest)
+library(sandwich)
+bptest(majorfit) #H0: homoskedastic</code></pre>
+<pre><code>## 
+##  studentized Breusch-Pagan test
+## 
+## data:  majorfit
+## BP = 18.719, df = 15, p-value = 0.2267</code></pre>
+<pre class="r"><code>#recompute regression
+coeftest(majorfit, vcov = vcovHC(majorfit))</code></pre>
+<pre><code>##
+## t test of coefficients:
+##
+## Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept) 6.0361e-02 1.0502e-02 5.7475 4.667e-08 ***
+## Men 3.0477e-08 2.2494e-07 0.1355 0.89240
+## Women 5.1453e-08 1.9058e-07 0.2700 0.78754
+## MajorCategoryCommunication 3.2873e-02 1.7082e-02 1.9245
+0.05613 .
+## MajorCategoryLiberal Arts 1.2730e-02 1.2613e-02 1.0093
+0.31439
+## MajorCategoryNatural Sciences 1.6438e-03 1.2248e-02
+0.1342 0.89341
+## Men:Women -1.3157e-13 2.2753e-12 -0.0578 0.95396
+## Men:MajorCategoryCommunication 1.9613e-07 9.9419e-07
+0.1973 0.84387
+## Men:MajorCategoryLiberal Arts 3.5734e-07 2.6448e-07
+1.3511 0.17863
+## Men:MajorCategoryNatural Sciences 8.1132e-08 4.7687e-07
+0.1701 0.86513
+## Women:MajorCategoryCommunication -4.8129e-07 9.5553e-07
+-0.5037 0.61520
+## Women:MajorCategoryLiberal Arts -2.9132e-07 2.1797e-07
+-1.3365 0.18335
+## Women:MajorCategoryNatural Sciences -9.3927e-08
+6.4199e-07 -0.1463 0.88387
+## Men:Women:MajorCategoryCommunication 3.0573e-12
+3.2651e-11 0.0936 0.92552
+## Men:Women:MajorCategoryLiberal Arts 2.0170e-12
+2.7353e-12 0.7374 0.46200
+## Men:Women:MajorCategoryNatural Sciences 7.4275e-14
+2.6174e-11 0.0028 0.99774
+## ---
+## Signif. codes: 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1
+&#39; &#39; 1</code></pre>
+<p>The linear regression model predicts the unemployment rate for the number of men, women and majors in the Business category to be 6.036e-02 (p=1.48e-08). Controlling for major category and number of women, with every one addition of a male graduate, there is a 3.048e-08 unit increase in unemployment rate (p=0.942). Controlling major category and number of men, with every one addition of a female graduate, there is a 5.145e-08 unit increase in unemployment rate (p=0.890). Controlling for number of men and women, the unemployment rate for majors in communication is 3.287e-02 times higher than majors in business (p=0.165). Controlling for number of men and women, the unemployment rate for majors in liberal arts is 1.273e-02 times higher than majors in business (p=0.273). Controlling for number of men and women, the unemployment rate for majors in the natural sciences is 1.644e-03 times higher than majors in business (p= 0.881).</p>
+<p>The interpretations for interactions that make sense are as follows:</p>
+<p>Controlling for the number of women, the slope for the number of men on unemployment rate is 1.961e-07 times higher for communication majors compared to business majors (p=0.895). Controlling for the number women, the slope for the number of men on unemployment rate is 3.573e-07 times higher for liberal arts majors compared to business majors (p= 0.468). Controlling for the number of women, the slope for the number men on unemployment rate is 8.113e-08 times higher for natural sciences majors compared to business majors (p=0.864).</p>
+<p>Controlling for the number of men, the slope for the number of women on unemployment rate is 4.813e-07 times lower for communication majors compared to business majors (p=0.605). Controlling for the number men, the slope for the number of women on unemployment rate is 2.017e-12 times lower for liberal arts majors compared to business majors (p=0.482). Controlling for the number of men, the slope for the number of women on unemployment rate is 9.393e-08 times lower for natural science majors compared to business majors (p=0.823).</p>
+<p>The slope for the number of men and women on unemployment rate is 3.057e-12 times higher for communication majors compared to business majors (p=0.784). The slope for the number of men and women on unemployment rate is 2.0170e-12 times higher for liberal arts majors compared to business majors (p=0.639). The slope for the number men on unemployment rate is 7.427e-14 times higher for natural sciences majors compared to business majors (p=0.987).</p>
+<p>Based on the plot, the linearity assumption was not met since there appeared to be obvious funneling. A Kolmogorov–Smirnov test was used to assess normality. The p-value for this test was 0.2363. Since it is greater than the significance level of 0.05, the null hypothesis was not rejected which suggests that the data passed the normality assumption. The homoskedasticity assumption was met since the p-value of the test was 0.2267, failing to reject the null hypothesis.</p>
+<p>The regression results computed using robust standard errors with the ‘coeftest’ yielded similar estimates as the linear regression. The only significant value was still the intercept. The most obvious changes were the SEs between the original and the robust results. There is a reduction by almost 50% between the original SEs and the robust SEs for all variables except the intercept, where the opposite trend is observed. The change in the SEs is also reflected in the change in p-values which are also reduced in the robust test compared to the original for most variable. The proportion of variation that the model explains was determined by the R-squared value, 0.08793. This means that 8.793% of the variation in the outcome is explained by this model.</p>
+</div>
+<div id="bootstrap-se" class="section level3">
+<h3>Bootstrap SE</h3>
+<pre class="r"><code>set.seed(123)
+
+#bootstrap standard error by resampling residuals
+  resids&lt;-majorfit$residuals #save residuals
+  fitted&lt;-majorfit$fitted.values #save yhats/predictions
+  
+  resid_resamp&lt;-replicate(5000,{
+    new_resids&lt;-sample(resids,replace=TRUE) #resample resids w/ replacement
+    majors$new_y&lt;-fitted+new_resids #add new resids to yhats to get new &quot;data&quot;
+    fit1&lt;-lm(new_y~Men*Women*MajorCategory, data=majors) #refit model
+    coef(fit1) #save coefficient estimates (b0, b1, etc)
+})
+  ## Estimated SEs
+resid_resamp%&gt;%t%&gt;%as.data.frame%&gt;%summarize_all(sd)</code></pre>
+<pre><code>## (Intercept) Men Women MajorCategoryCommunication
+MajorCategoryLiberal Arts
+## 1 0.009546279 4.050982e-07 3.585925e-07 0.02249897
+0.01094157
+## MajorCategoryNatural Sciences Men:Women
+Men:MajorCategoryCommunication
+## 1 0.0103524 3.210915e-12 1.406407e-06
+## Men:MajorCategoryLiberal Arts Men:MajorCategoryNatural
+Sciences Women:MajorCategoryCommunication
+## 1 4.733464e-07 4.514224e-07 8.866663e-07
+## Women:MajorCategoryLiberal Arts
+Women:MajorCategoryNatural Sciences
+## 1 4.001201e-07 4.045667e-07
+## Men:Women:MajorCategoryCommunication
+Men:Women:MajorCategoryLiberal Arts
+## 1 1.055483e-11 4.099386e-12
+## Men:Women:MajorCategoryNatural Sciences
+## 1 4.177901e-12</code></pre>
+<pre class="r"><code>## Empirical 95% CI
+resid_resamp%&gt;%t%&gt;%as.data.frame%&gt;%pivot_longer(1:16)%&gt;%group_by(name)%&gt;%
+ summarize(lower=quantile(value,.025), upper=quantile(value,.975))</code></pre>
+<pre><code>## # A tibble: 16 x 3
+## name lower upper
+## &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 (Intercept) 4.24e- 2 7.99e- 2
+## 2 MajorCategoryCommunication -9.63e- 3 7.78e- 2
+## 3 MajorCategoryLiberal Arts -9.19e- 3 3.31e- 2
+## 4 MajorCategoryNatural Sciences -1.94e- 2 2.15e- 2
+## 5 Men -7.72e- 7 8.67e- 7
+## 6 Men:MajorCategoryCommunication -2.50e- 6 3.01e- 6
+## 7 Men:MajorCategoryLiberal Arts -5.87e- 7 1.29e- 6
+## 8 Men:MajorCategoryNatural Sciences -8.12e- 7 9.78e- 7
+## 9 Men:Women -6.52e-12 6.33e-12
+## 10 Men:Women:MajorCategoryCommunication -1.79e-11
+2.36e-11
+## 11 Men:Women:MajorCategoryLiberal Arts -6.18e-12
+9.77e-12
+## 12 Men:Women:MajorCategoryNatural Sciences -8.22e-12
+8.16e-12
+## 13 Women -6.40e- 7 7.83e- 7
+## 14 Women:MajorCategoryCommunication -2.21e- 6 1.31e- 6
+## 15 Women:MajorCategoryLiberal Arts -1.09e- 6 4.72e- 7
+## 16 Women:MajorCategoryNatural Sciences -8.86e- 7 7.04e-
+7</code></pre>
+<p>The bootstrap SEs compared to the original SEs pretty much stayed the same. Men changed from 4.199e-07 to 4.050982e-07, women changed from 3.708e-07 to 3.585925e-07, communication major changed from 2.359e-02 to 0.02249897, liberal arts majors changed from 1.158e-02 to 0.01094157, natural sciences changed from 1.093e-02 to 0.0103524. With interactions following the similar trend of bootstrap SEs being lower than the original SEs. This trend can also be used to determine the change in p-values compared to the original. The p-values of the bootstrap SEs are predicted to be slightly lower than those of the original SEs.</p>
+<p>When comparing bootstrap SEs to the robust SEs, the same conclusion made in the previous section can be drawn since the original SEs and bootstrap SEs are very similar. There is an observed, almost 50%, decrease in the robust SEs compared to the bootstrap SE for all except the intercept where the reverse occurs. Since this trend can be extrapolated to make a conclusion about p-values. The p-values of the bootstrap SEs are predicted to be higher than those of the robust SEs, for most cases.</p>
+<p>All estimates for the variables and their interactions were not significant since zero lies within the 95% confidence intervals. Similar to the previous model, based on the confidence intervals, only the intercept was significant.</p>
+</div>
+<div id="logistic-regression-model" class="section level3">
+<h3>Logistic regression model</h3>
+<pre class="r"><code>#logistic regression model
+majorlogfit&lt;-glm(MoreWomen~MajorCategory+Employed+Unemployment_rate,data=majors, family=&quot;binomial&quot;)
+summary(majorlogfit)</code></pre>
+<pre><code>##
+## Call:
+## glm(formula = MoreWomen ~ MajorCategory + Employed +
+Unemployment_rate,
+## family = &quot;binomial&quot;, data = majors)
+##
+## Deviance Residuals:
+## Min 1Q Median 3Q Max
+## -1.9185 -1.0391 0.5953 1.0288 1.5050
+##
+## Coefficients:
+## Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept) -6.514e-02 6.220e-01 -0.105 0.91658
+## MajorCategoryCommunication 2.216e+00 9.141e-01 2.425
+0.01532 *
+## MajorCategoryLiberal Arts 1.818e+00 5.843e-01 3.111
+0.00186 **
+## MajorCategoryNatural Sciences 1.356e-01 5.371e-01 0.252
+0.80073
+## Employed 1.955e-06 3.571e-06 0.547 0.58404
+## Unemployment_rate -7.453e+00 5.729e+00 -1.301 0.19327
+## ---
+## Signif. codes: 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1
+&#39; &#39; 1
+##
+## (Dispersion parameter for binomial family taken to be 1)
+##
+## Null deviance: 234.94 on 170 degrees of freedom
+## Residual deviance: 208.13 on 165 degrees of freedom
+## AIC: 220.13
+##
+## Number of Fisher Scoring iterations: 4</code></pre>
+<pre class="r"><code>exp(coef(majorlogfit))</code></pre>
+<pre><code>## (Intercept) MajorCategoryCommunication
+MajorCategoryLiberal Arts
+## 0.9369332912 9.1737389721 6.1589054943
+## MajorCategoryNatural Sciences Employed Unemployment_rate
+## 1.1451814271 1.0000019553 0.0005798766</code></pre>
+<pre class="r"><code>#confusion matrix
+probs&lt;-predict(majorlogfit,type=&quot;response&quot;)
+table(predict=as.numeric(probs&gt;0.5),truth=majors$MoreWomen)%&gt;%addmargins</code></pre>
+<pre><code>##        truth
+## predict   0   1 Sum
+##     0    59  41 100
+##     1    17  54  71
+##     Sum  76  95 171</code></pre>
+<pre class="r"><code>#accuracy, sensitivity (TPR), specificity (TNR), precision (PPV), auc
+class_diag(probs,majors$MoreWomen)</code></pre>
+<pre><code>## acc sens spec ppv f1 auc
+## 1 0.6608187 0.5684211 0.7763158 0.7605634 0.6506024
+0.7022161</code></pre>
+<pre class="r"><code>#ggplot
+majors$logit&lt;-predict(majorlogfit,type=&quot;link&quot;)
+majors%&gt;%ggplot()+geom_density(aes(logit,color=MoreWomen,fill=MoreWomen), alpha=.4)+
+  theme(legend.position=c(.85,.85))+geom_vline(xintercept=0)+xlab(&quot;logit (log-odds)&quot;)+
+  geom_rug(aes(logit,color=MoreWomen))</code></pre>
+<p><img src="/project/project2_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#ROC
+library(plotROC)
+ROCplot&lt;-ggplot(majorlogfit)+geom_roc(aes(d=MoreWomen,m=probs), n.cuts=0) 
+ROCplot</code></pre>
+<p><img src="/project/project2_files/figure-html/unnamed-chunk-6-2.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>calc_auc(ROCplot)</code></pre>
+<pre><code>##   PANEL group       AUC
+## 1     1    -1 0.7022161</code></pre>
+<p>The binary variable created separated majors by the population of women majority using the “Share Women” variable (proportion over 50% and under 50%). The odds of majority female for majors in business, Employed = 0, Unemployment_rate = 0 is 0.937 (p=0.917). Controlling for number employed and Unemployement rate, the odds of having a women majority in a communication major is 9.174 times the odds of women majority in business majors (p=0.015, significant). Controlling for number employed and Unemployement rate, the odds of having a women majority in a liberal arts major is 6.159 times the odds of women majority in business majors (p=0.002, significant). Controlling for number employed and Unemployement rate, the odds of having a women majority in a natural science major is 1.145 times the odds of women majority in business majors (p=0.801, not significant). Controlling for major category and unemployment rate, for every one person increase in employed number, the odds of having a women majority increases by a factor of 1 (p=0.584, not significant). Controlling for major category and number employed, for every one unit increase in unemployment rate, the odds of having a women majority increases by a factor of 0.000580 (p=0.193, not significant).</p>
+<p>The accuracy of the model is 0.661, which means only 66.1% of majors were accurately classified in the right women proportion group. The sensitivity was 0.564 which is the proportion of majors that were correctly classified in the majority women group. The specificity was 0.776 which is the proportion of majors that were correctly classified in the minority women group, the model does a better job at prediciting the majors in which women are a minority. The precision was 0.761 which is the proportion of majors that were classified in the majority women group that were actually in that group, this is a decently high. The AUC of the ROC curve is 0.702 which classifies this model as fair.</p>
+</div>
+<div id="cv-and-lasso" class="section level3">
+<h3>CV and LASSO</h3>
+<pre class="r"><code>#logistic regression model
+majors1 &lt;- majors %&gt;% select(-Major, -logit, -ShareWomen, -Women, -Men) #take out variables that contribute to the binary factor created in section 0 and ones that don&#39;t make sense 
+
+majorlogfitall&lt;-glm(MoreWomen~.,data=majors1, family=&quot;binomial&quot;)
+summary(majorlogfitall)</code></pre>
+<pre><code>##
+## Call:
+## glm(formula = MoreWomen ~ ., family = &quot;binomial&quot;, data =
+majors1)
+##
+## Deviance Residuals:
+## Min 1Q Median 3Q Max
+## -2.5932 -0.7163 0.2582 0.6073 2.2462
+##
+## Coefficients:
+## Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept) -3.105e+00 9.347e-01 -3.322 0.000894 ***
+## Rank 3.008e-02 5.494e-03 5.475 4.38e-08 ***
+## Total 1.264e-04 8.268e-05 1.528 0.126434
+## Employed -6.816e-05 8.606e-05 -0.792 0.428365
+## Unemployed -1.082e-03 3.582e-04 -3.021 0.002518 **
+## Unemployment_rate 1.409e+00 7.235e+00 0.195 0.845623
+## MajorCategoryCommunication 2.069e+00 1.118e+00 1.851
+0.064114 .
+## MajorCategoryLiberal Arts 1.144e+00 7.875e-01 1.453
+0.146214
+## MajorCategoryNatural Sciences 3.089e-01 7.128e-01 0.433
+0.664720
+## ---
+## Signif. codes: 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1
+&#39; &#39; 1
+##
+## (Dispersion parameter for binomial family taken to be 1)
+##
+## Null deviance: 234.94 on 170 degrees of freedom
+## Residual deviance: 153.19 on 162 degrees of freedom
+## AIC: 171.19
+##
+## Number of Fisher Scoring iterations: 5</code></pre>
+<pre class="r"><code>exp(coef(majorlogfitall))</code></pre>
+<pre><code>## (Intercept) Rank Total
+## 0.04482198 1.03053237 1.00012637
+## Employed Unemployed Unemployment_rate
+## 0.99993184 0.99891850 4.09037718
+## MajorCategoryCommunication MajorCategoryLiberal Arts
+MajorCategoryNatural Sciences
+## 7.91687948 3.14007720 1.36194486</code></pre>
+<pre class="r"><code>#Accuracy, Sensitivity, Specificity, Precision, AUC
+probs1&lt;-predict(majorlogfitall,type=&quot;response&quot;)
+class_diag(probs1,majors1$MoreWomen)</code></pre>
+<pre><code>##         acc sens      spec      ppv        f1       auc
+## 1 0.7953216  0.8 0.7894737 0.826087 0.8128342 0.8688366</code></pre>
+<pre class="r"><code>#CV with same model
+set.seed(123)
+k=10
+
+data &lt;- majors1 %&gt;% sample_frac #put rows of dataset in random order
+folds &lt;- ntile(1:nrow(data),n=10) #create fold labels
+
+diags&lt;-NULL
+for(i in 1:k){
+  train &lt;- data[folds!=i,] #create training set (all but fold i)
+  test &lt;- data[folds==i,] #create test set (just fold i)
+  truth &lt;- test$MoreWomen #save truth labels from fold i
+  
+  fit &lt;- glm(MoreWomen~., data=train, family=&quot;binomial&quot;)
+  probs2 &lt;- predict(fit, newdata=test, type=&quot;response&quot;)
+  
+  diags&lt;-rbind(diags,class_diag(probs2,truth))
+}
+
+summarize_all(diags,mean)</code></pre>
+<pre><code>## acc sens spec ppv f1 auc
+## 1 0.7529412 0.7665873 0.7546429 0.8012446 0.7673291
+0.8205952</code></pre>
+<pre class="r"><code>#LASSO
+library(glmnet)
+set.seed(123)
+
+major_resps&lt;-as.matrix(majors1$MoreWomen) #grab response
+major_preds&lt;-model.matrix(MoreWomen~.,data=majors1)[,-1] #predictors (drop intercept)
+
+cv &lt;- cv.glmnet(major_preds,major_resps, family=&quot;binomial&quot;) #picks an optimal value for lambda through 10-fold
+lasso_fit&lt;-glmnet(major_preds,major_resps,lambda=cv$lambda.1se, family=&quot;binomial&quot;)
+coef(lasso_fit)</code></pre>
+<pre><code>## 9 x 1 sparse Matrix of class &quot;dgCMatrix&quot;
+##                                        s0
+## (Intercept)                   -1.26999567
+## Rank                           0.01758649
+## Total                          .         
+## Employed                       .         
+## Unemployed                     .         
+## Unemployment_rate              .         
+## MajorCategoryCommunication     .         
+## MajorCategoryLiberal Arts      .         
+## MajorCategoryNatural Sciences  .</code></pre>
+<pre class="r"><code>probs3 &lt;- predict(lasso_fit, major_preds, type=&quot;response&quot;)
+class_diag(probs3, majors1$MoreWomen)</code></pre>
+<pre><code>##        acc sens      spec  ppv        f1       auc
+## 1 0.748538  0.8 0.6842105 0.76 0.7794872 0.8393352</code></pre>
+<pre class="r"><code>table(predict=as.numeric(probs3&gt;.5),truth=majors1$MoreWomen)%&gt;%addmargins</code></pre>
+<pre><code>##        truth
+## predict   0   1 Sum
+##     0    52  19  71
+##     1    24  76 100
+##     Sum  76  95 171</code></pre>
+<pre class="r"><code>#CV with lasso
+set.seed(123)
+k=10
+
+data &lt;- majors1 %&gt;% sample_frac #put rows of dataset in random order
+folds &lt;- ntile(1:nrow(data),n=10) #create fold labels
+
+diags&lt;-NULL
+for(i in 1:k){
+  train &lt;- data[folds!=i,] #create training set (all but fold i)
+  test &lt;- data[folds==i,] #create test set (just fold i)
+  truth &lt;- test$MoreWomen #save truth labels from fold i
+  
+  fit &lt;- glm(MoreWomen~Rank, data=train, family=&quot;binomial&quot;)
+  probs4 &lt;- predict(fit, newdata=test, type=&quot;response&quot;)
+  
+  diags&lt;-rbind(diags,class_diag(probs4,truth))
+}
+
+summarize_all(diags,mean)</code></pre>
+<pre><code>## acc sens spec ppv f1 auc
+## 1 0.7588235 0.783254 0.7353571 0.7898046 0.7745388
+0.8479762</code></pre>
+<ul>
+<li><p>In-sample classification diagnostics:</p>
+<ul>
+<li>Accuracy: 0.795, 79.5% of majors were accurately classified in the right women proportion group in this model</li>
+<li>Sensitivity: 0.8, 80% of majors were correctly classified in the majority women group</li>
+<li>Specificity: 0.789, 78.9% of majors were correctly classified in the minority women group</li>
+<li>Precision: 0.813, 81.3% of majors were classified in the majority women group that were actually in that group</li>
+<li>AUC: 0.869</li>
+</ul></li>
+</ul>
+<p>The AUC shows that this model is good at predicting the women classification, doing a better job at predicting the majority women group but not by much.</p>
+<ul>
+<li><p>Out-of-Sample classification diagnostics:</p>
+<ul>
+<li>Accuracy: 0.753, 75.3% of majors were accurately classified in the right women proportion group in this model</li>
+<li>Sensitivity: 0.767, 76.7% of majors were correctly classified in the majority women group</li>
+<li>Specificity: 0.755, 75.5% of majors were correctly classified in the minority women group</li>
+<li>Precision: 0.801, 80.1% of majors were classified in the majority women group that were actually in that group</li>
+<li>AUC: 0.821</li>
+</ul></li>
+</ul>
+<p>The AUC shows that this model is good at predicting the women classification, doing a better job at predicting the majority women group but not by much. While the AUC of this model is in the same classification as the in-sample model, it is lower (0.821 compared to 0.869).</p>
+<p>After performing a LASSO on the same model, only the Rank variable was non-zero. Using just this retained variable, the AUC of this model is 0.848 which is greater than the out-of-sample AUC of the previous model but less than the in-sample AUC, suggesting some over-fitting. This change, however, does not change the model classification as all three models run remain classified as good.</p>
+<p>…</p>
+</div>
+</div>
+
+              <hr>
+               <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+      
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="/js/docs.min.js"></script>
+<script src="/js/main.js"></script>
+
+<script src="/js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>

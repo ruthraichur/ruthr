@@ -1,0 +1,13 @@
+---
+title: "Resume"
+output: html_document
+hidedate: true
+hiderelated: true
+hidediscus: true
+---
+
+<center>
+<object data="/resume_files/RuthRaichur_Resume.pdf" type="application/pdf" >
+<embed src="/resume_files/RuthRaichur_Resume.pdf" type="application/pdf" style="min-height:100vh;width:100%" />
+</object>
+</center>

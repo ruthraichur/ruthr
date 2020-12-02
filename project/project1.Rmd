@@ -1,0 +1,191 @@
+---
+title: 'Evaluating Movies based on the Bechdel Test and Movie Ratings'
+author: "Ruth Raichur rr46673"
+date: '9/17/2020'
+output:
+  html_document:
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+  pdf_document:
+    toc: no
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, fig.align = "center", warning = F, message = F,
+tidy=TRUE, tidy.opts=list(width.cutoff=60), R.options=list(max.print=100))
+```
+
+<P style="page-break-before: always">
+\newpage
+
+## Project 1: Exploratory Data Analysis 
+```{r}
+library(readr)
+next_bechdel_test <- bechdel_test <- read_csv("SDS 348_bechdel_test.csv")
+movie_ratings <- read_csv("IMDB-Movie-Data.csv")
+```
+
+### Introduction
+
+The Bechdel test, also known as the Bechdel-Wallace test, is a measure of how women are represented in movies. When it was first created in 1985, there were only 3 critera for a movie to pass the test: 1. the movie must have (at least) two named women in it 2. who talk to each other 3. about something besides men.
+
+A fivethirtyeight article in 2016 discussed the need to improve the criteria and tested the top 50 movies of 2016 against modern criteria that included BIPOC women inclusion and a minumum female cast and crew percentage. The next_bechdel_test data (found from github) is the data used by fivethirtyeight to run this test. It lists the top 50 movies of 2016 and a few criteria they used to run the test such actor names, character name, role type, gender as as well as whether or not the movie passed the new bechdel test (represented by 1 for yes and 0 for no). The data included other unkown variable that will be cleaned up during the tidying process.
+
+Comparing the movie ratings between movies that passed and failed the bechdel test will provide us insight as to how well the improved female representation is recieved by the public. The movie_ratings dataset, pulled from imdb, lists all movies available on the imbd website with variable such as genre, release year, average rating and revenue in millions of dollars.
+
+It will be interesting to analyze the associations like genre and rating with movies that passed the bechdel test. I would imagine that most movies passing the bechdel test would have higher ratings and perhaps be romantic comedies. Additionally, we can determine and compare the overall success of movies based on the revenue and evaluate whether movies that passed the bechdel test faired better in cinemas.
+
+### Tidying: Rearranging Wide/Long 
+##### Selecting data
+```{r}
+library(tidyr)
+library(dplyr)
+
+#variable selection#
+bechdel <- next_bechdel_test %>% select(2:5,7,8) 
+ratings <- movie_ratings %>% select(2,3,7,9, 11)
+```
+
+##### Untidying data
+```{r}
+bechdel %>% pivot_wider(names_from = "GENDER", values_from = "bechdel") -> untidy_bechdel
+ratings %>% pivot_wider(names_from = "Year", values_from = "Genre") -> untidy_ratings
+```
+
+##### Retidying 
+```{r}
+untidy_bechdel %>% pivot_longer(5:8, names_to = "GENDER", values_to = "bechdel") %>% na.omit() -> bechdel1
+untidy_ratings %>% pivot_longer(4:14, names_to = "Year", values_to = "Genre")%>% na.omit() %>% separate(Genre, into = c("primary_genre")) -> ratings1
+```
+
+While my data was already tidy, it contained many variables that I was not intending on using. I used select() to pick the variable I would like to analyze and then proceeded to untidy and retidy my data. To untidy my next_bechdel_test data, I created columns for each cast member's gender and indicated whether their respective movie passed or failed the bechdel test in those columns. Similarly, I untidied by movie_ratings dataset by sorting the genres by the release year. After retidying my data, I noticed that multiple genres were listed on a column. Since having multiple genres would possibly complicate things, I picked the first listed genre as the "primary_genre" and used separate() to clean that column.
+
+### Joining/Merging 
+```{r}
+library(dplyr)
+inner_join(ratings1, bechdel1, by = c("Title"="MOVIE")) -> bechdel_ratings 
+```
+I joined my datasets by movie names to pull all the common movies between the two datasets. Since the variables I wanted to analyze were from both datasets, I used the inner join function to ensure that all the variables from both datasets would be pulled into a new dataset. It appears that data was lost mostly from the movie_ratings dataset during the join since the final joined dataset has 1,682 rows while the two parent datasets had 2,072 and 1,682 rows, this suggests that all movies from the bechdel dataset was preserved and matched with the movies common in the IMDb dataset. 
+
+### Wrangling 
+
+```{r}
+library(dplyr)
+```
+
+
+##### Mutating to find the proportion of female actors in each movie:
+```{r}
+bechdel_ratings %>% group_by(Title) %>% mutate(allpeople = length(GENDER)) %>% filter(GENDER == "Female") %>% mutate(female_prop = length(GENDER)/allpeople) %>% select(1:5,10,12) %>% arrange(bechdel) %>% distinct()-> by_female_prop 
+```
+
+##### Summary statisitcs between bechdel passed and bechdel failed:
+```{r}
+by_female_prop %>% group_by(bechdel) %>% summarise_if(is.numeric, list(min = min, max = max, mean = mean, sd = sd, var = var,n= n_distinct), na.rm=T)
+```
+
+##### Quartiles of variable sorted by gender:
+```{r}
+bechdel_ratings %>% group_by(GENDER) %>% summarise_if(is.numeric, list(q1 = quantile), probs = (0.25)) %>% na.omit()
+bechdel_ratings %>% group_by(GENDER) %>% summarise_if(is.numeric, list(q2 = quantile), probs = (0.5))%>% na.omit()
+bechdel_ratings %>% group_by(GENDER) %>% summarise_if(is.numeric, list(q3 = quantile), probs = (0.75))%>% na.omit()
+```
+
+##### Correlation matrix:
+```{r}
+cormat <- cor(by_female_prop[sapply(by_female_prop, is.numeric)], use='pairwise')
+cormat
+```
+
+I used the mutate function to create a new variable that listed the proportion of female cast members for each movie. I then used that dataset to compare summary statistics between movies that passed the bechdel test and ones that failed. I generated summary statistics of minimum, maximum, mean, standard deviation, variance and number of distinct values for the numeric variables Rating, Revenue and female proportion. The most notable statistics was the difference in mean rating between passed and failed bechdel test movies, movies that failed had an average rating of 6.776 on a 10 scale while movies that passed had a rating of 7.075. Another interesting observation was that the mean female proportion was higher in movies that failed the bechdel test (0.341) compared to the ones that passed (0.222). Of course this comes with the caveat that the standard deviation of female proportion was much greater in movies that failed the test (0.922). Finally, the minimum revenue between the two movie categories were starkly different, the movies that failed bechdel generated a minimum of 0.54 million dollars while the minimum generated by movies that passed was 65.03 million dollars. 
+
+In addition to the summary stastics of the female proportion data, I used the original data set to generate quartiles of the three numeric variables (rating, revenue and bechdel) for movies based on gender. The more females or males a movie would have, the heavier they would have affected the quartiles. This allows us to determine weighted quartile values of ratings and revenue. We see that the upper quartile ratings and revenue for movies with males are equal to movies with females while the median revenue generated by movies with males (128.34 M) are suprisingly lower than the median revenue generated by movies with females (151.06 M). A correlation matrix was generated with the female proportion dataset, from this we can see that the are rather weak correlations between rating, revenue, bechdel test and female cast proportions. The highest positive correlation (0.417) is between revenue and movie rating, suggesting higher rated movies incurred higher revenue, while the most negative correlation (-0.460) is between the bechdel test and female proportion, this means a movie that passed the bechdel test has a lower proportion of female cast members in their movie - a suprising observation.
+
+### Visualizing 
+
+##### Correlation heatmap 
+```{r}
+library(tidyverse)
+cormat %>% as.data.frame %>% rownames_to_column("var1") %>% pivot_longer(-1, names_to = "vars2", values_to = "correlation") %>% ggplot(aes(var1, vars2, fill = correlation))+geom_tile()+ geom_text(aes(label=round(correlation,2)),color = "white", size = 4) +coord_fixed() +  theme(axis.text.x=element_text(angle=30, size=9, vjust = 1, hjust = 1))
+```
+As mentioned above the correlation matrix, and therefore this heatmap, does not show many strong correlations between any of the four variables. Revenue and Ratings have very weak positive relationships with movies passing the bechdel test while, as discusses above, there is a negative correlation between female cast proportion and bechdel passing movies. Additionally, female proportion has the same weak negative correlation with revenue and ratings sugessting that a higher the female proportion, the lower the revenue and rating of the movie, while the strongest positive correlation is between revenue and ratings.
+
+##### Plot 1 - Faceted histogram: Bechdel movies pass/fail comaprison by movie rating and genre 
+```{r}
+bechdel.labs <- c("Bechdel fail", "Bechdel pass")
+names(bechdel.labs) <- c("0", "1")
+
+bechdel_ratings %>% ggplot(aes(x= primary_genre, y=Rating, fill = primary_genre))+ facet_wrap(~bechdel, labeller = labeller(bechdel = bechdel.labs))+
+  geom_bar(stat = "summary", fun=mean)+
+  scale_y_continuous(name = "Average movie rating", breaks = seq(0,10,2))+
+  geom_errorbar(stat="summary", fun.data = mean_se, width = 0.6)+
+  scale_fill_brewer(palette = 3)+
+  xlab("Primary genre")+ labs(title = "Average rating by primary genre accoring to bechdel")+
+  theme(axis.text.x=element_text(angle=30, size=9, vjust = 1, hjust = 1))
+```
+The plot above evaulates the average movie ratings by genre and whether or not the movie passed the bechdel test. We see that movies that passed the bechdel test were limited to genres of action, adventure, animation and biography. It is surprising that drama is not one of those genres. When comparing the average ratings, we see that biographies faired best in movies that passed the bechdel test while drama and biography were the two best rated genres among movies that failed the bechdel test. Action movies that passed the bechdel test had higher ratings than action movies that failed the test. We see that adventure and animation movies were rated higher among movies that failed the bechdel test compared to those that passed the test.
+
+##### Plot 2 - Scatterplot with linear regression line: Comparison of Bechdel test pass/fail movies by revenue and female proportion
+```{r}
+by_female_prop %>% mutate(bechdel2 = recode(bechdel, "0" = "fail", "1" = "pass")) %>% 
+  ggplot(aes(x = female_prop, y = `Revenue (Millions)`, color = bechdel2))+ geom_point()+geom_smooth(method = lm, aes(color = bechdel2))+
+  theme_light()+
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  scale_y_continuous(name = "Revenue (Millions)", breaks = seq(0,500,50))+
+  scale_x_continuous(name = "Proportion of female cast", breaks = seq(0,1,0.1))+
+  labs(title = "Revenue based on proportion of female cast according to bechdel test")
+```
+This scatter plot compares the revenue of the movie by proportion of female cast. A linear regression line shows the trends of these variable of movies that passed and failed the bechdel test. We see that while bechdel passing movies have lower proportions of female cast, the revenue increases as the proportion increase. In contrast, the movies that failed the bechdel test had higher proportion of female cast member but with decreasing revenue as that proportion increased. This graphs also indicates that most movies have a female proportion between a 0.2 and a 0.4 and a revenue between 150 and 250 million regardless of whether or not they passed the bechdel test.
+
+### Dimensionality Reduction
+##### Principal Component Analysis
+```{r}
+#pca#
+library(tidyverse)
+
+#scaling data#
+bechdel3 <- bechdel_ratings %>% mutate(bechdel2 = recode(bechdel, "0" = "fail", "1" = "pass"))
+
+bechdel_nums <-  bechdel3 %>% select_if(is.numeric) %>% scale 
+rownames(bechdel_nums) <-  bechdel_ratings$Title
+bechdel_pca <-  princomp(bechdel_nums)
+names(bechdel_pca)
+
+#summarizing results#
+summary(bechdel_pca, loadings=T)
+
+#determining how many PC's to keep#
+eigval <-  bechdel_pca$sdev^2 #square to convert SDs to eigenvalues#
+varprop=round(eigval/sum(eigval), 2) #proportion of var explained by each PC#
+
+ggplot() + geom_bar(aes(y=varprop, x=1:3), stat="identity") + xlab("") + geom_path(aes(y=varprop, x=1:3)) + 
+  geom_text(aes(x=1:3, y=varprop, label=round(varprop, 2)), vjust=1, col="white", size=5) + 
+  scale_y_continuous(breaks=seq(0, .6, .2), labels = scales::percent) + 
+  scale_x_continuous(breaks=1:10)
+
+#plotting a biplot#
+bechdel_pca$loadings[1:3, 1:2] %>% as.data.frame %>% rownames_to_column %>% ggplot() + geom_hline(aes(yintercept=0), lty=2) +   geom_vline(aes(xintercept=0), lty=2) + ylab("PC2") + xlab("PC1") +   geom_segment(aes(x=0, y=0, xend=Comp.1, yend=Comp.2), arrow=arrow(), col= "light blue", size = 2) +  geom_label(aes(x=Comp.1*.9, y=Comp.2 + .1, label=rowname)) + theme_light()
+
+
+#histogram shows we need to keep all three#
+#graphing PC1 against PC2 and PC2 against PC3#
+
+results <-  bechdel3 %>% as.data.frame %>% 
+  mutate(PC1=bechdel_pca$scores[, 1], PC2=bechdel_pca$scores[, 2], PC3=bechdel_pca$scores[, 3])
+
+results %>% ggplot(aes(PC1, PC2, color=bechdel2, shape = primary_genre)) + geom_point(size=4)
+results %>% ggplot(aes(PC2, PC3, color=bechdel2, shape = primary_genre)) + geom_point(size=4)
+
+```
+The PCA describes my data by analyzing the variables with the most variation to helps us better understand underlying trends. After standarizing my data and coverting my standard deviations to eigen values, I graphed the proportion of variation explained by each principle component. This graph showed that PC1 only accounted for 40%, PC2 for 33% and PC3 for 26% of the variation, this suggests that I would need to evaluate all three principle components as they all have underlying trend  since components 1 and 2 only accounted for 74% of the total variance. Since all the PC1 variables are positive, it suggests that all of the variables are slightly correlated. The biplot confirms that all three of my numerical variables are weakly correlated with revenue and bechdel pass/fail being the weakest relationship. It also shows that ratings have the least underlying variation between groups, suggesting the effect of rating on the trends is weak. It also suggests that PC2 does the best job at explaning the variation. Using this information, we can compare the eigen values of comp 2 to see that the bechdel passing/failing status (0.858) affected my data the most, which is to be expected. The high PC2 values means a passing bechdel but low revenue while the low PC2 value (-0.514) suggests a high revenue but a failing bechdel test. Interpreting the PC3 values the same way, a high PC3 value meanse high rating, low revenue and failing bechdel while a low PC3 means a passed bechdel, high revenue and a low rating. 
+
+After graphing PC1 against PC2, and PC2 against PC3, we can see that movies that passed and failed the bechdel test are distinctly separated when spread on the scatterplot. In contrast, when shaped by genre, we see that genre lacks any underlying trend while we do observe that some genres that are in the failed bechdel test group are not in the pass bechdel test group. From the graphs, it appears that PC2 does a better job at separating the movies based on their bechdel test compared to PC1 or PC3.
+
+...
+
+
+
+
+
