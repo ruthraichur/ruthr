@@ -15,6 +15,10 @@ output:
 ### **Speaking two different languages**
 
 This is a test
- 
+
+```{r}
+print("hello word")
+```
 
 ...
+

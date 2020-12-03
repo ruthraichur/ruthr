@@ -14,7 +14,7 @@
       
       <guid>/post/2020/10/19/r-and-python-when-two-worlds-collide/</guid>
       <description>  Speaking two different languages This is a test
-…
+print(&amp;quot;hello word&amp;quot;) ## [1] &amp;quot;hello word&amp;quot; …
  </description>
     </item>
     
