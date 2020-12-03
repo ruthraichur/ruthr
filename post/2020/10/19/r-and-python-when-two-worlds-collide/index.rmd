@@ -20,5 +20,9 @@ This is a test
 print("hello word")
 library(reticulate)
 ```
+This is python chunk
+```{python}
+print(2+4)
+```
 ...
 
