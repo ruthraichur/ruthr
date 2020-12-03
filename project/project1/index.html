@@ -61,7 +61,7 @@
         </div>
         <div class="blog-title">
           <h4>
-          January 1, 0001 
+          October 19, 2020 
             &nbsp;&nbsp;
             
           </h4>
@@ -251,7 +251,7 @@ ggplot() + geom_bar(aes(y=varprop, x=1:3), stat=&quot;identity&quot;) + xlab(&qu
   scale_x_continuous(breaks=1:10)</code></pre>
 <p><img src="/project/project1_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#plotting a biplot#
-bechdel_pca$loadings[1:3, 1:2] %&gt;% as.data.frame %&gt;% rownames_to_column %&gt;% ggplot() + geom_hline(aes(yintercept=0), lty=2) +   geom_vline(aes(xintercept=0), lty=2) + ylab(&quot;PC2&quot;) + xlab(&quot;PC1&quot;) +   geom_segment(aes(x=0, y=0, xend=Comp.1, yend=Comp.2), arrow=arrow(), col= &quot;light blue&quot;, size = 2) +  geom_label(aes(x=Comp.1*.9, y=Comp.2 + .1, label=rowname)) + theme_light()</code></pre>
+bechdel_pca$loadings[1:3, 1:2] %&gt;% as.data.frame %&gt;% rownames_to_column %&gt;% ggplot() + geom_hline(aes(yintercept=0), lty=2) +   geom_vline(aes(xintercept=0), lty=2) + ylab(&quot;PC2&quot;) + xlab(&quot;PC1&quot;) +   geom_segment(aes(x=0, y=0, xend=Comp.1, yend=Comp.2), arrow=arrow(), col= &quot;blue&quot;, size = 2) +  geom_label(aes(x=Comp.1*.9, y=Comp.2 + .1, label=rowname)) + theme_light()</code></pre>
 <p><img src="/project/project1_files/figure-html/unnamed-chunk-14-2.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#histogram shows we need to keep all three#
 #graphing PC1 against PC2 and PC2 against PC3#

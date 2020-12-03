@@ -1,7 +1,7 @@
 ---
 title: 'Evaluating Movies based on the Bechdel Test and Movie Ratings'
 author: "Ruth Raichur rr46673"
-date: '9-17-2020'
+date: '2020-10-19T22:55:05-04:00'
 output:
   html_document:
     toc: yes
@@ -166,7 +166,7 @@ ggplot() + geom_bar(aes(y=varprop, x=1:3), stat="identity") + xlab("") + geom_pa
   scale_x_continuous(breaks=1:10)
 
 #plotting a biplot#
-bechdel_pca$loadings[1:3, 1:2] %>% as.data.frame %>% rownames_to_column %>% ggplot() + geom_hline(aes(yintercept=0), lty=2) +   geom_vline(aes(xintercept=0), lty=2) + ylab("PC2") + xlab("PC1") +   geom_segment(aes(x=0, y=0, xend=Comp.1, yend=Comp.2), arrow=arrow(), col= "light blue", size = 2) +  geom_label(aes(x=Comp.1*.9, y=Comp.2 + .1, label=rowname)) + theme_light()
+bechdel_pca$loadings[1:3, 1:2] %>% as.data.frame %>% rownames_to_column %>% ggplot() + geom_hline(aes(yintercept=0), lty=2) +   geom_vline(aes(xintercept=0), lty=2) + ylab("PC2") + xlab("PC1") +   geom_segment(aes(x=0, y=0, xend=Comp.1, yend=Comp.2), arrow=arrow(), col= "blue", size = 2) +  geom_label(aes(x=Comp.1*.9, y=Comp.2 + .1, label=rowname)) + theme_light()
 
 
 #histogram shows we need to keep all three#
