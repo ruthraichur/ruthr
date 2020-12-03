@@ -1,0 +1,17 @@
+---
+title: "R and Python: When Two Worlds Collide"
+author: Ruth Raichur
+date: '2020-12-03'
+slug: r-and-python
+categories: []
+tags: []
+description: ''
+output:
+  html_document:
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+  pdf_document:
+    toc: no
+---
