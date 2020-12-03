@@ -24,5 +24,14 @@
       <description>Project 1: Exploratory Data Analysis library(readr) next_bechdel_test &amp;lt;- bechdel_test &amp;lt;- read_csv(&amp;quot;SDS 348_bechdel_test.csv&amp;quot;) movie_ratings &amp;lt;- read_csv(&amp;quot;IMDB-Movie-Data.csv&amp;quot;) Introduction The Bechdel test, also known as the Bechdel-Wallace test, is a measure of how women are represented in movies. When it was first created in 1985, there were only 3 critera for a movie to pass the test: 1. the movie must have (at least) two named women in it 2. who talk to each other 3.</description>
     </item>
     
+    <item>
+      <title>Resume</title>
+      <link>/resume/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/resume/</guid>
+      <description>     </description>
+    </item>
+    
   </channel>
 </rss>
