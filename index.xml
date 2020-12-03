@@ -32,7 +32,7 @@
       
       <guid>/post/2020/10/19/r-and-python-when-two-worlds-collide/</guid>
       <description>  Speaking two different languages This is a test
-print(&amp;quot;hello word&amp;quot;) ## [1] &amp;quot;hello word&amp;quot; …
+print(&amp;quot;hello word&amp;quot;) ## [1] &amp;quot;hello word&amp;quot; library(reticulate) ## Warning: package &amp;#39;reticulate&amp;#39; was built under R version 3.6.2 …
  </description>
     </item>
     
