@@ -33,24 +33,24 @@ So here's Python, comparable to amino acid sequences that determine EVERYTHING a
 Here's an example using regex, a very useful and highly sophisticated search tool:
 
 Let's create a string with the lyrics of chorus of "Lovely Day" by Bill Withers 
-```{Python}
+```{python}
 lovelyday = "Then I look at you, And the world's alright with me, Just one look at you, And I know it's gonna be, A lovely day (Lovely day, lovely day, lovely day, lovely day) (Lovely day, lovely day, lovely day, lovely day) A lovely day (Lovely day, lovely day, lovely day, lovely day) (Lovely day, lovely day, lovely day, lovely day)"
 ```
 We can use Python to count the number of times each character is repeated, but first let's clean it up using regex.
-```{Python}
+```{python}
 import re
 #substituting punctuations with a space
 lovelyday1 = re.sub(r"[. , ( )]"," ", lovelyday) 
 #splitting each word into it's own character
 lovelyday2 = re.split(r"\s", lovelyday1)
-#now let's make thing's lower case
+#now let's make things lower case
 lovelylist = []
 
 for item in lovelyday2:
         lovelylist.append(item.lower())
 ```
 Now that our data is clean let's count it up using a function we can create on Python
-```{Python}
+```{python}
 def count_chars(sentence): #argument "sentence" will be string object
     counts = {}            #new dict
     for c in sentence:     #for each character in sentence
@@ -81,7 +81,7 @@ DNAseq
 library(reticulate)
 ```
 Let's create a function in Python that measure the number of <a href="https://en.wikipedia.org/wiki/K-mer#Sequence_assembly"> 3-mers (codons) </a> combinations in this sequence and use it on the string created on r. We will communicate to Python that it is a string from R using "r."
-```{Python}
+```{python}
 def three_mers(seq):
     counts = {}
     nuc = len(seq) - 3 + 1
@@ -95,7 +95,7 @@ def three_mers(seq):
 three_mers(r.DNAseq)
 ```
 Now we see the counts for every codon that this sequence can produce, we can even determine the potential amino acid sequence in terms of codons using regex like this:
-```{Python}
+```{python}
 re.findall(r"\w{3}", r.DNAseq)
 ```
 

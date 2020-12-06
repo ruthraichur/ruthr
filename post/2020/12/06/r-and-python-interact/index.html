@@ -101,7 +101,7 @@ The image above illustrates this process in detail, notice how mode of “commun
 lovelyday1 = re.sub(r&quot;[. , ( )]&quot;,&quot; &quot;, lovelyday) 
 #splitting each word into it&#39;s own character
 lovelyday2 = re.split(r&quot;\s&quot;, lovelyday1)
-#now let&#39;s make thing&#39;s lower case
+#now let&#39;s make things lower case
 lovelylist = []
 
 for item in lovelyday2:
@@ -119,6 +119,27 @@ for item in lovelyday2:
         print(c, &quot;appears&quot;, counts[c],&quot;times&quot;)
         
 count_chars(lovelylist)</code></pre>
+<pre><code>## then appears 1 times
+## i appears 2 times
+## look appears 2 times
+## at appears 2 times
+## you appears 2 times
+##  appears 24 times
+## and appears 2 times
+## the appears 1 times
+## world&#39;s appears 1 times
+## alright appears 1 times
+## with appears 1 times
+## me appears 1 times
+## just appears 1 times
+## one appears 1 times
+## know appears 1 times
+## it&#39;s appears 1 times
+## gonna appears 1 times
+## be appears 1 times
+## a appears 2 times
+## lovely appears 18 times
+## day appears 18 times</code></pre>
 <p>So that’s pretty neat right?
 Before we continue to exhibit the cool features of “The Mighty Python” I must introduce you to our mediator.</p>
 </div>
@@ -143,8 +164,10 @@ Before we continue to exhibit the cool features of “The Mighty Python” I mus
     return counts
     
 three_mers(r.DNAseq)</code></pre>
+<pre><code>## {&#39;agg&#39;: 2, &#39;ggt&#39;: 1, &#39;gtt&#39;: 2, &#39;tta&#39;: 4, &#39;tat&#39;: 1, &#39;att&#39;: 2, &#39;tag&#39;: 1, &#39;agc&#39;: 2, &#39;gct&#39;: 3, &#39;ctt&#39;: 2, &#39;ttc&#39;: 2, &#39;tcg&#39;: 2, &#39;cgt&#39;: 2, &#39;gta&#39;: 2, &#39;tac&#39;: 3, &#39;act&#39;: 1, &#39;ctg&#39;: 2, &#39;tgt&#39;: 2, &#39;gtg&#39;: 2, &#39;ttt&#39;: 1, &#39;tcc&#39;: 3, &#39;cca&#39;: 4, &#39;cac&#39;: 3, &#39;acc&#39;: 4, &#39;cct&#39;: 3, &#39;ctc&#39;: 2, &#39;cag&#39;: 1, &#39;gcg&#39;: 2, &#39;cgg&#39;: 1, &#39;gga&#39;: 2, &#39;gaa&#39;: 2, &#39;aag&#39;: 1, &#39;ggg&#39;: 1, &#39;gag&#39;: 1, &#39;agt&#39;: 1, &#39;acg&#39;: 2, &#39;cgc&#39;: 2, &#39;tgc&#39;: 2, &#39;tga&#39;: 1, &#39;aat&#39;: 1, &#39;atg&#39;: 1, &#39;gcc&#39;: 1, &#39;cat&#39;: 1, &#39;taa&#39;: 2, &#39;aaa&#39;: 2, &#39;aac&#39;: 2, &#39;ccg&#39;: 1, &#39;cga&#39;: 2, &#39;gac&#39;: 1, &#39;gat&#39;: 1, &#39;atc&#39;: 1, &#39;cta&#39;: 1, &#39;aca&#39;: 2, &#39;ccc&#39;: 1, &#39;caa&#39;: 1}</code></pre>
 <p>Now we see the counts for every codon that this sequence can produce, we can even determine the potential amino acid sequence in terms of codons using regex like this:</p>
 <pre class="python"><code>re.findall(r&quot;\w{3}&quot;, r.DNAseq)</code></pre>
+<pre><code>## [&#39;agg&#39;, &#39;tta&#39;, &#39;tta&#39;, &#39;gct&#39;, &#39;tcg&#39;, &#39;tac&#39;, &#39;tgt&#39;, &#39;gtt&#39;, &#39;tcc&#39;, &#39;acc&#39;, &#39;tcc&#39;, &#39;acc&#39;, &#39;agc&#39;, &#39;gga&#39;, &#39;agg&#39;, &#39;gag&#39;, &#39;tac&#39;, &#39;gct&#39;, &#39;cgc&#39;, &#39;gtg&#39;, &#39;ctg&#39;, &#39;aat&#39;, &#39;gcc&#39;, &#39;att&#39;, &#39;aaa&#39;, &#39;ccg&#39;, &#39;acg&#39;, &#39;atc&#39;, &#39;cta&#39;, &#39;cac&#39;, &#39;cct&#39;, &#39;taa&#39;, &#39;aca&#39;]</code></pre>
 <p>Here was a little morsel into the world of Python and R and how they interact. Of course, I had to bring some biology into it and make it a whole lot cooler if you ask me.</p>
 <p>If you made it this far into the blog post, thanks for enduring me and my incessant need to bring genetics into literally every conversation I ever have.</p>
 </div>
