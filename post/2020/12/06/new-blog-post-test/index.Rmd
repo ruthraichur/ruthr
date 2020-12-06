@@ -1,0 +1,19 @@
+---
+title: New Blog Post Test
+author: 'Ruth Raichur'
+date: '2020-12-06'
+slug: new-blog-post-test
+categories: []
+tags: []
+description: ''
+---
+
+This is an R codechunk
+```{R}
+print("hello world")
+```
+
+This is a phython chunk
+```{python}
+print(2+3)
+```

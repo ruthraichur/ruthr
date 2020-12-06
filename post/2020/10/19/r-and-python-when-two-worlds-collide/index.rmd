@@ -17,7 +17,7 @@ output:
 This is a test
 
 ```{r}
-print("hello word")
+print("hello world")
 library(reticulate)
 ```
 This is python chunk
