@@ -74,19 +74,24 @@
 <script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
 
 
-<p>#Speaking Two Different Languages</p>
-<p>Over the course of this semester in Computational Biology, I have come to realize that unlike many languages around the world, coding languages are pretty transferable. Mastering one could potentially make it much easier to pick up another and, better yet, there are packages that allow you to speak both languages at the same time and have them seamlessly interact. Being the genetics nerd I am, I find it easiest to illustrate the interactions between R and python using the very functions that determines who we are from the essence of our being - gene expression.</p>
+<div id="speaking-two-different-languages" class="section level3">
+<h3>Speaking Two Different Languages</h3>
+<p>Over the course of this semester in Computational Biology, I have come to realize that unlike many languages around the world, coding languages are pretty transferable. Mastering one could potentially make it much easier to pick up another and, better yet, there are packages that allow you to speak both languages at the same time and have them seamlessly interact. Being the genetics nerd I am, I find it easiest to illustrate the interactions between R and python using the very functions that determine who we are from the essence of our being - gene expression.</p>
 <p>To summarize, gene expression is the process that reads our DNA and converts it into functional products that turns combinations from a mere four bases into beautiful and unique human beings.
 <img src="https://www.genome.gov/sites/default/files/tg/en/illustration/gene_expression_adv.jpg" />
 The image above illustrates this process in detail, notice how mode of “communication” changes multiple times as we start with DNA which is processed to mRNA which can then be read by ribosomes and converted into an animo acid sequence - the functional product (proteins).</p>
 <p>I would like to think the interactions between R and Python are comparable to the molecular interactions in gene expression…they do both work with “code.”</p>
-<p>#Coding in R: Everyone Needs a Home Base
-In the same way that the mRNA acts as an instruction manual for the production of proteins and can be considered the “base” sequence, learning R as a base coding language prepares you for the great, big functional world of so many other (more powerful) coding languages that are available. Now this is not to say that R is not powerful or does not have the ability to cause stress induced panics and frustrations that most coding languages come with, but speaking for myself and many other pure research noobs who are first introduced to the whizzing world of programming by learning R, we can look at R as home base. Like mRNA, it is pretty simple and pretty close to home (DNA or in our case, English). The learning curve is minimal and pretty enjoyable if you ask me!</p>
+</div>
+<div id="coding-in-r-everyone-needs-a-home-base" class="section level3">
+<h3>Coding in R: Everyone Needs a Home Base</h3>
+<p>In the same way that the mRNA acts as an instruction manual for the production of proteins and can be considered the “base” sequence, learning R as a base coding language prepares you for the great, big functional world of so many other (more powerful) coding languages that are available. Now this is not to say that R is not powerful or does not have the ability to cause stress induced panics and frustrations that most coding languages come with, but speaking for myself and many other pure research noobs who are first introduced to the whizzing world of programming by learning R, we can look at R as home base. Like mRNA, it is pretty simple and pretty close to home (DNA or in our case, English). The learning curve is minimal and pretty enjoyable if you ask me!</p>
 <p>Lets generate a string of a random DNA sequence!</p>
 <pre class="r"><code>DNAseq &lt;- c(&quot;aggttattagcttcgtactgtgtttccacctccaccagcggaagggagtacgctcgcgtgctgaatgccattaaaccgacgatcctacacccttaaacaa&quot;)</code></pre>
 <p>But of course, as the very nature of our beings yearn for more sophistication and intricacy, so does our journey into the world of big data and programming. We want more; more depth, more power and more complexity (sometimes I really wonder why).</p>
-<p>#The Mighty Python: Oh, The Places We’ll Go
-So here’s python, now comparable to amino acid sequnces that determine EVERYTHING about us. A total game changer compared to R. Mighty Python is the functional language. It is versatile and as it appears, a lot more powerful than R (but also much more capable of making you want to scream into a pillow). Even with the minimal exposure I’ve had with python, I have seen the additional tools and power this language has and it is intriguing.</p>
+</div>
+<div id="the-mighty-python-oh-the-places-well-go" class="section level3">
+<h3>The Mighty Python: Oh, The Places We’ll Go!</h3>
+<p>So here’s python, now comparable to amino acid sequnces that determine EVERYTHING about us. A total game changer compared to R. Mighty Python is the functional language. It is versatile and as it appears, a lot more powerful than R (but also much more capable of making you want to scream into a pillow). Even with the minimal exposure I’ve had with python, I have seen the additional tools and power this language has and it is intriguing.</p>
 <p>Here’s an example using regex, a very useful and highly sophistocated search tool:</p>
 <p>Let’s create a string with the lyrics of chorus of “Lovely Day” by Bill Withers</p>
 <pre class="python"><code>lovelyday = &quot;Then I look at you, And the world&#39;s alright with me, Just one look at you, And I know it&#39;s gonna be, A lovely day (Lovely day, lovely day, lovely day, lovely day) (Lovely day, lovely day, lovely day, lovely day) A lovely day (Lovely day, lovely day, lovely day, lovely day) (Lovely day, lovely day, lovely day, lovely day)&quot;</code></pre>
@@ -137,8 +142,10 @@ count_chars(lovelylist)</code></pre>
 ## day appears 18 times</code></pre>
 <p>So that’s pretty neat right?
 Before we continue to exhibit the cool features of “The Mighty Python” I must introduce you to our mediator.</p>
-<p>#The Reticulate Function: The Ribosome That Reads R to Python (and vice verse)
-For the full process of gene expression to be complete, mRNA and the amino acids must find a medium to interact by which proteins can be sequences as the mRNA dictates, this is done so with the assistance of the ribosome. Similar to the ribosome, in R we have a package called reticulate. With reticulate we can allow information to be shared and understood between R and python.</p>
+</div>
+<div id="the-reticulate-function-the-ribosome-that-reads-r-to-python-and-vice-verse" class="section level3">
+<h3>The Reticulate Function: The Ribosome That Reads R to Python (and vice verse)</h3>
+<p>For the full process of gene expression to be complete, mRNA and the amino acids must find a medium to interact by which proteins can be sequences as the mRNA dictates, this is done so with the assistance of the ribosome. Similar to the ribosome, in R we have a package called reticulate. With reticulate we can allow information to be shared and understood between R and python.</p>
 <p>Here’s a pretty cool illustration:</p>
 <p>Remember that R string we created way back when? We can use that string combined with the cool packages and functions in python to make something out of what is seemingly a useless string of A T G Cs.</p>
 <p>First here’s an R chunck looking at the string and loading the reticulate package</p>
@@ -163,6 +170,7 @@ three_mers(r.DNAseq)</code></pre>
 <pre><code>## [&#39;agg&#39;, &#39;tta&#39;, &#39;tta&#39;, &#39;gct&#39;, &#39;tcg&#39;, &#39;tac&#39;, &#39;tgt&#39;, &#39;gtt&#39;, &#39;tcc&#39;, &#39;acc&#39;, &#39;tcc&#39;, &#39;acc&#39;, &#39;agc&#39;, &#39;gga&#39;, &#39;agg&#39;, &#39;gag&#39;, &#39;tac&#39;, &#39;gct&#39;, &#39;cgc&#39;, &#39;gtg&#39;, &#39;ctg&#39;, &#39;aat&#39;, &#39;gcc&#39;, &#39;att&#39;, &#39;aaa&#39;, &#39;ccg&#39;, &#39;acg&#39;, &#39;atc&#39;, &#39;cta&#39;, &#39;cac&#39;, &#39;cct&#39;, &#39;taa&#39;, &#39;aca&#39;]</code></pre>
 <p>Here was a little morsel into the world of python and R and how they interact. Of course, I had to bring some biology into it and make it a whole lot cooler if you ask me.</p>
 <p>If you made it this far into the blog post, thanks for enduring me and my incessant need to bring genetics into literally every conversation I ever have.</p>
+</div>
 
               <hr>
                <div class="related-posts">
