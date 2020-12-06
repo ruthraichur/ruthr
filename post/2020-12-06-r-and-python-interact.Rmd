@@ -13,6 +13,8 @@ Over the course of this semester in Computational Biology, I have come to realiz
 
 To summarize, gene expression is the process that reads our DNA and converts it into functional products that turns combinations from a mere four bases into beautiful and unique human beings.
 ![](https://www.genome.gov/sites/default/files/tg/en/illustration/gene_expression_adv.jpg)
+*Image credit <a href="https://www.genome.gov/genetics-glossary/Gene-Expression"> National Human Genome Research Institute </a> *
+
 The image above illustrates this process in detail, notice how mode of "communication" changes multiple times as we start with DNA which is processed to mRNA which can then be read by ribosomes and converted into an animo acid sequence - the functional product (proteins). 
 
 I would like to think the interactions between R and Python are comparable to the molecular interactions in gene expression. After all, they do both work with "code."
