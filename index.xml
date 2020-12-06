@@ -8,12 +8,12 @@
     <language>en-US</language>
     <lastBuildDate>Sun, 06 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>R and Python Interact: A Genetics Nerd&#39;s Perspective.</title>
+      <title>R and Python Interact: A Genetics Nerd&#39;s Perspective</title>
       <link>/post/2020/12/06/r-and-python-interact/</link>
       <pubDate>Sun, 06 Dec 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/2020/12/06/r-and-python-interact/</guid>
-      <description>Speaking Two Different Languages Over the course of this semester in Computational Biology, I have come to realize that unlike many languages around the world, coding languages are pretty transferable. Mastering one could potentially make it much easier to pick up another and, better yet, there are packages that allow you to speak both languages at the same time and have them seamlessly interact. Being the genetics nerd I am, I find it easiest to illustrate the interactions between R and python using the very functions that determine who we are from the essence of our being - gene expression.</description>
+      <description>Speaking Two Different Languages Over the course of this semester in Computational Biology, I have come to realize that unlike many languages around the world, coding languages are pretty transferable. Mastering one could potentially make it much easier to pick up another and, better yet, there are packages that allow you to speak both languages at the same time and have them seamlessly interact. Being the genetics nerd I am, I find it easiest to illustrate the interactions between R and Python using the very functions that determine who we are from the essence of our being - gene expression.</description>
     </item>
     
     <item>
