@@ -15,7 +15,7 @@
       <guid>/post/2020/12/06/new-blog-post-test/</guid>
       <description>  This is an R codechunk
 print(&amp;quot;hello world&amp;quot;) ## [1] &amp;quot;hello world&amp;quot; This is a phython chunk
-print(2+3) ## 5 </description>
+print(2+3) ## 5 print(&amp;quot;hello world&amp;quot;) ## hello world </description>
     </item>
     
     <item>

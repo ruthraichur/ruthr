@@ -16,4 +16,6 @@ print("hello world")
 This is a phython chunk
 ```{python}
 print(2+3)
+
+print("hello world")
 ```
