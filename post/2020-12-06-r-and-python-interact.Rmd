@@ -20,7 +20,7 @@ I would like to think the interactions between R and Python are comparable to th
 ### Coding in R: Everyone Needs a Home Base
 In the same way that the mRNA acts as an instruction manual for the production of proteins and can be considered the "base" sequence, learning R as a base coding language prepares you for the great, big functional world of so many other (more powerful) coding languages that are available. Now this is not to say that R is not powerful or does not have the ability to cause stress induced panics and frustrations that most coding languages come with, but speaking for myself and many other pure research noobs who are first introduced to the whizzing world of programming by learning R, we can look at R as home base. Like mRNA, it is pretty simple and pretty close to home (DNA or in our case, English). The learning curve is minimal and pretty enjoyable if you ask me!
 
-Lets generate a string of a random DNA sequence!
+Let's generate a string of a random DNA sequence!
 ```{r}
 DNAseq <- c("aggttattagcttcgtactgtgtttccacctccaccagcggaagggagtacgctcgcgtgctgaatgccattaaaccgacgatcctacacccttaaacaa")
 ```
@@ -28,9 +28,9 @@ DNAseq <- c("aggttattagcttcgtactgtgtttccacctccaccagcggaagggagtacgctcgcgtgctgaatg
 But of course, as the very nature of our beings yearn for more sophistication and intricacy, so does our journey into the world of big data and programming. We want more; more depth, more power and more complexity (sometimes I really wonder why).
 
 ### The Mighty Python: Oh, The Places We'll Go!
-So here's python, now comparable to amino acid sequnces that determine EVERYTHING about us. A total game changer compared to R. Mighty Python is the functional language. It is versatile and as it appears, a lot more powerful than R (but also much more capable of making you want to scream into a pillow). Even with the minimal exposure I've had with python, I have seen the additional tools and power this language has and it is intriguing. 
+So here's python, comparable to amino acid sequences that determine EVERYTHING about us. A total game changer compared to R. Mighty Python is the functional language. It is versatile and as it appears, a lot more powerful than R (but also much more capable of making you want to scream into a pillow). Even with the minimal exposure I've had with python, I have seen the additional tools and power this language has and it is intriguing. 
 
-Here's an example using regex, a very useful and highly sophistocated search tool:
+Here's an example using regex, a very useful and highly sophisticated search tool:
 
 Let's create a string with the lyrics of chorus of "Lovely Day" by Bill Withers 
 ```{python}
