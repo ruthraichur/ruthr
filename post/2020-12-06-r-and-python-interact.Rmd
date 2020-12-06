@@ -71,7 +71,7 @@ So that's pretty neat right?
 Before we continue to exhibit the cool features of "The Mighty Python" I must introduce you to our mediator. 
 
 ### The Reticulate Function: The Ribosome That Reads R to Python (and vice verse)
-For the full process of gene expression to be complete, mRNA and the amino acids must find a medium to interact by which proteins can be sequences as the mRNA dictates, this is done so with the assistance of the ribosome. Similar to the ribosome, in R we have a package called reticulate. With reticulate we can allow information to be shared and understood between R and Python. 
+For the full process of gene expression to be complete, mRNA and the amino acids must find a medium to interact by which proteins can be sequenced as the mRNA dictates, this is done so with the assistance of the ribosome. Similar to the ribosome, in R we have a package called reticulate. With reticulate we can allow information to be shared and understood between R and Python. 
 
 Here's a pretty cool illustration:
 
@@ -98,7 +98,10 @@ three_mers(r.DNAseq)
 ```
 Now we see the counts for every codon that this sequence can produce, we can even determine the potential amino acid sequence in terms of codons using regex like this:
 ```{python}
-re.findall(r"\w{3}", r.DNAseq)
+#covert DNAseq to RNA
+RNAseq = re.sub(r"t", "u", r.DNAseq)
+#grouping them into codons
+re.findall(r"\w{3}", RNAseq)
 ```
 
 Here was a little morsel into the world of Python and R and how they interact. Of course, I had to bring some biology into it and make it a whole lot cooler if you ask me. 
