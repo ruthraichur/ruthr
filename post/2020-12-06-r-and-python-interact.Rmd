@@ -1,0 +1,104 @@
+---
+title: "R and Python Interact: A Genetics Nerd's Perspective."
+author: 'Ruth Raichur'
+date: '2020-12-06'
+slug: r-and-python-interact
+categories: []
+tags: []
+description: ''
+---
+#Speaking Two Different Languages
+
+Over the course of this semester in Computational Biology, I have come to realize that unlike many languages around the world, coding languages are pretty transferable. Mastering one could potentially make it much easier to pick up another and, better yet, there are packages that allow you to speak both languages at the same time and have them seamlessly interact. Being the genetics nerd I am, I find it easiest to illustrate the interactions between R and python using the very functions that determines who we are from the essence of our being - gene expression.
+
+To summarize, gene expression is the process that reads our DNA and converts it into functional products that turns combinations from a mere four bases into beautiful and unique human beings.
+![](https://www.genome.gov/sites/default/files/tg/en/illustration/gene_expression_adv.jpg)
+The image above illustrates this process in detail, notice how mode of "communication" changes multiple times as we start with DNA which is processed to mRNA which can then be read by ribosomes and converted into an animo acid sequence - the functional product (proteins). 
+
+I would like to think the interactions between R and Python are comparable to the molecular interactions in gene expression...they do both work with "code."
+
+#Coding in R: Everyone Needs a Home Base
+In the same way that the mRNA acts as an instruction manual for the production of proteins and can be considered the "base" sequence, learning R as a base coding language prepares you for the great, big functional world of so many other (more powerful) coding languages that are available. Now this is not to say that R is not powerful or does not have the ability to cause stress induced panics and frustrations that most coding languages come with, but speaking for myself and many other pure research noobs who are first introduced to the whizzing world of programming by learning R, we can look at R as home base. Like mRNA, it is pretty simple and pretty close to home (DNA or in our case, English). The learning curve is minimal and pretty enjoyable if you ask me!
+
+Lets generate a string of a random DNA sequence!
+```{r}
+DNAseq <- c("aggttattagcttcgtactgtgtttccacctccaccagcggaagggagtacgctcgcgtgctgaatgccattaaaccgacgatcctacacccttaaacaa")
+```
+
+But of course, as the very nature of our beings yearn for more sophistication and intricacy, so does our journey into the world of big data and programming. We want more; more depth, more power and more complexity (sometimes I really wonder why).
+
+#The Mighty Python: Oh, The Places We'll Go
+So here's python, now comparable to amino acid sequnces that determine EVERYTHING about us. A total game changer compared to R. Mighty Python is the functional language. It is versatile and as it appears, a lot more powerful than R (but also much more capable of making you want to scream into a pillow). Even with the minimal exposure I've had with python, I have seen the additional tools and power this language has and it is intriguing. 
+
+Here's an example using regex, a very useful and highly sophistocated search tool:
+
+Let's create a string with the lyrics of chorus of "Lovely Day" by Bill Withers 
+```{python}
+lovelyday = "Then I look at you, And the world's alright with me, Just one look at you, And I know it's gonna be, A lovely day (Lovely day, lovely day, lovely day, lovely day) (Lovely day, lovely day, lovely day, lovely day) A lovely day (Lovely day, lovely day, lovely day, lovely day) (Lovely day, lovely day, lovely day, lovely day)"
+```
+We can use python to count the number of times each character is repeated, but first let's clean it up using regex.
+```{python}
+import re
+#substituting punctuations with a space
+lovelyday1 = re.sub(r"[. , ( )]"," ", lovelyday) 
+#splitting each word into it's own character
+lovelyday2 = re.split(r"\s", lovelyday1)
+#now let's make thing's lower case
+lovelylist = []
+
+for item in lovelyday2:
+        lovelylist.append(item.lower())
+```
+Now that our data is clean let's count it up using a function we can create on python
+```{python}
+def count_chars(sentence): #argument "sentence" will be string object
+    counts = {}            #new dict
+    for c in sentence:     #for each character in sentence
+        if c in counts:    #have we seen it before in this sentence?
+            counts[c]+=1   #if yes, increase count by 1
+        else:
+            counts[c]=1    #otherwise, set count
+            
+    for c in counts:
+        print(c, "appears", counts[c],"times")
+        
+count_chars(lovelylist)
+```
+
+So that's pretty neat right? 
+Before we continue to exhibit the cool features of "The Mighty Python" I must introduce you to our mediator. 
+
+#The Reticulate Function: The Ribosome That Reads R to Python (and vice verse)
+For the full process of gene expression to be complete, mRNA and the amino acids must find a medium to interact by which proteins can be sequences as the mRNA dictates, this is done so with the assistance of the ribosome. Similar to the ribosome, in R we have a package called reticulate. With reticulate we can allow information to be shared and understood between R and python. 
+
+Here's a pretty cool illustration:
+
+Remember that R string we created way back when? We can use that string combined with the cool packages and functions in python to make something out of what is seemingly a useless string of A T G Cs. 
+
+First here's an R chunck looking at the string and loading the reticulate package
+```{r}
+DNAseq
+library(reticulate)
+```
+Let's create a function in python that measure the number of <a href="https://en.wikipedia.org/wiki/K-mer#Sequence_assembly"> 3-mers (codons) </a> combinations in this sequence and use it on the string created on r. We will communicate to python that it is a string from R using "r."
+```{python}
+def three_mers(seq):
+    counts = {}
+    nuc = len(seq) - 3 + 1
+    for i in range(nuc):
+        codon = seq[i:i+3]
+        if codon not in counts:
+            counts[codon] = 0
+        counts[codon] += 1
+    return counts
+    
+three_mers(r.DNAseq)
+```
+Now we see the counts for every codon that this sequence can produce, we can even determine the potential amino acid sequence in terms of codons using regex like this:
+```{python}
+re.findall(r"\w{3}", r.DNAseq)
+```
+
+Here was a little morsel into the world of python and R and how they interact. Of course, I had to bring some biology into it and make it a whole lot cooler if you ask me. 
+
+If you made it this far into the blog post, thanks for enduring me and my incessant need to bring genetics into literally every conversation I ever have.

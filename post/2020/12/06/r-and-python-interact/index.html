@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Ruth Raichur" />
+    <meta name="description" content="Describe your website">
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico">
+    <title>R and Python Interact: A Genetics Nerd&#39;s Perspective.</title>
+    <meta name="generator" content="Hugo 0.79.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="/post/">BLOG</a></li>
+        
+        <li><a href="/projects/">PROJECTS</a></li>
+        
+        <li><a href="/resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="/post/2020/12/06/r-and-python-interact/">R and Python Interact: A Genetics Nerd&#39;s Perspective.</a></strong>
+          </h3>
+        </div>
+        <div class="blog-title">
+          <h4>
+          December 6, 2020 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<p>#Speaking Two Different Languages</p>
+<p>Over the course of this semester in Computational Biology, I have come to realize that unlike many languages around the world, coding languages are pretty transferable. Mastering one could potentially make it much easier to pick up another and, better yet, there are packages that allow you to speak both languages at the same time and have them seamlessly interact. Being the genetics nerd I am, I find it easiest to illustrate the interactions between R and python using the very functions that determines who we are from the essence of our being - gene expression.</p>
+<p>To summarize, gene expression is the process that reads our DNA and converts it into functional products that turns combinations from a mere four bases into beautiful and unique human beings.
+<img src="https://www.genome.gov/sites/default/files/tg/en/illustration/gene_expression_adv.jpg" />
+The image above illustrates this process in detail, notice how mode of “communication” changes multiple times as we start with DNA which is processed to mRNA which can then be read by ribosomes and converted into an animo acid sequence - the functional product (proteins).</p>
+<p>I would like to think the interactions between R and Python are comparable to the molecular interactions in gene expression…they do both work with “code.”</p>
+<p>#Coding in R: Everyone Needs a Home Base
+In the same way that the mRNA acts as an instruction manual for the production of proteins and can be considered the “base” sequence, learning R as a base coding language prepares you for the great, big functional world of so many other (more powerful) coding languages that are available. Now this is not to say that R is not powerful or does not have the ability to cause stress induced panics and frustrations that most coding languages come with, but speaking for myself and many other pure research noobs who are first introduced to the whizzing world of programming by learning R, we can look at R as home base. Like mRNA, it is pretty simple and pretty close to home (DNA or in our case, English). The learning curve is minimal and pretty enjoyable if you ask me!</p>
+<p>Lets generate a string of a random DNA sequence!</p>
+<pre class="r"><code>DNAseq &lt;- c(&quot;aggttattagcttcgtactgtgtttccacctccaccagcggaagggagtacgctcgcgtgctgaatgccattaaaccgacgatcctacacccttaaacaa&quot;)</code></pre>
+<p>But of course, as the very nature of our beings yearn for more sophistication and intricacy, so does our journey into the world of big data and programming. We want more; more depth, more power and more complexity (sometimes I really wonder why).</p>
+<p>#The Mighty Python: Oh, The Places We’ll Go
+So here’s python, now comparable to amino acid sequnces that determine EVERYTHING about us. A total game changer compared to R. Mighty Python is the functional language. It is versatile and as it appears, a lot more powerful than R (but also much more capable of making you want to scream into a pillow). Even with the minimal exposure I’ve had with python, I have seen the additional tools and power this language has and it is intriguing.</p>
+<p>Here’s an example using regex, a very useful and highly sophistocated search tool:</p>
+<p>Let’s create a string with the lyrics of chorus of “Lovely Day” by Bill Withers</p>
+<pre class="python"><code>lovelyday = &quot;Then I look at you, And the world&#39;s alright with me, Just one look at you, And I know it&#39;s gonna be, A lovely day (Lovely day, lovely day, lovely day, lovely day) (Lovely day, lovely day, lovely day, lovely day) A lovely day (Lovely day, lovely day, lovely day, lovely day) (Lovely day, lovely day, lovely day, lovely day)&quot;</code></pre>
+<p>We can use python to count the number of times each character is repeated, but first let’s clean it up using regex.</p>
+<pre class="python"><code>import re
+#substituting punctuations with a space
+lovelyday1 = re.sub(r&quot;[. , ( )]&quot;,&quot; &quot;, lovelyday) 
+#splitting each word into it&#39;s own character
+lovelyday2 = re.split(r&quot;\s&quot;, lovelyday1)
+#now let&#39;s make thing&#39;s lower case
+lovelylist = []
+
+for item in lovelyday2:
+        lovelylist.append(item.lower())</code></pre>
+<p>Now that our data is clean let’s count it up using a function we can create on python</p>
+<pre class="python"><code>def count_chars(sentence): #argument &quot;sentence&quot; will be string object
+    counts = {}            #new dict
+    for c in sentence:     #for each character in sentence
+        if c in counts:    #have we seen it before in this sentence?
+            counts[c]+=1   #if yes, increase count by 1
+        else:
+            counts[c]=1    #otherwise, set count
+            
+    for c in counts:
+        print(c, &quot;appears&quot;, counts[c],&quot;times&quot;)
+        
+count_chars(lovelylist)</code></pre>
+<pre><code>## then appears 1 times
+## i appears 2 times
+## look appears 2 times
+## at appears 2 times
+## you appears 2 times
+##  appears 24 times
+## and appears 2 times
+## the appears 1 times
+## world&#39;s appears 1 times
+## alright appears 1 times
+## with appears 1 times
+## me appears 1 times
+## just appears 1 times
+## one appears 1 times
+## know appears 1 times
+## it&#39;s appears 1 times
+## gonna appears 1 times
+## be appears 1 times
+## a appears 2 times
+## lovely appears 18 times
+## day appears 18 times</code></pre>
+<p>So that’s pretty neat right?
+Before we continue to exhibit the cool features of “The Mighty Python” I must introduce you to our mediator.</p>
+<p>#The Reticulate Function: The Ribosome That Reads R to Python (and vice verse)
+For the full process of gene expression to be complete, mRNA and the amino acids must find a medium to interact by which proteins can be sequences as the mRNA dictates, this is done so with the assistance of the ribosome. Similar to the ribosome, in R we have a package called reticulate. With reticulate we can allow information to be shared and understood between R and python.</p>
+<p>Here’s a pretty cool illustration:</p>
+<p>Remember that R string we created way back when? We can use that string combined with the cool packages and functions in python to make something out of what is seemingly a useless string of A T G Cs.</p>
+<p>First here’s an R chunck looking at the string and loading the reticulate package</p>
+<pre class="r"><code>DNAseq</code></pre>
+<pre><code>## [1] &quot;aggttattagcttcgtactgtgtttccacctccaccagcggaagggagtacgctcgcgtgctgaatgccattaaaccgacgatcctacacccttaaacaa&quot;</code></pre>
+<pre class="r"><code>library(reticulate)</code></pre>
+<p>Let’s create a function in python that measure the number of <a href="https://en.wikipedia.org/wiki/K-mer#Sequence_assembly"> 3-mers (codons) </a> combinations in this sequence and use it on the string created on r. We will communicate to python that it is a string from R using “r.”</p>
+<pre class="python"><code>def three_mers(seq):
+    counts = {}
+    nuc = len(seq) - 3 + 1
+    for i in range(nuc):
+        codon = seq[i:i+3]
+        if codon not in counts:
+            counts[codon] = 0
+        counts[codon] += 1
+    return counts
+    
+three_mers(r.DNAseq)</code></pre>
+<pre><code>## {&#39;agg&#39;: 2, &#39;ggt&#39;: 1, &#39;gtt&#39;: 2, &#39;tta&#39;: 4, &#39;tat&#39;: 1, &#39;att&#39;: 2, &#39;tag&#39;: 1, &#39;agc&#39;: 2, &#39;gct&#39;: 3, &#39;ctt&#39;: 2, &#39;ttc&#39;: 2, &#39;tcg&#39;: 2, &#39;cgt&#39;: 2, &#39;gta&#39;: 2, &#39;tac&#39;: 3, &#39;act&#39;: 1, &#39;ctg&#39;: 2, &#39;tgt&#39;: 2, &#39;gtg&#39;: 2, &#39;ttt&#39;: 1, &#39;tcc&#39;: 3, &#39;cca&#39;: 4, &#39;cac&#39;: 3, &#39;acc&#39;: 4, &#39;cct&#39;: 3, &#39;ctc&#39;: 2, &#39;cag&#39;: 1, &#39;gcg&#39;: 2, &#39;cgg&#39;: 1, &#39;gga&#39;: 2, &#39;gaa&#39;: 2, &#39;aag&#39;: 1, &#39;ggg&#39;: 1, &#39;gag&#39;: 1, &#39;agt&#39;: 1, &#39;acg&#39;: 2, &#39;cgc&#39;: 2, &#39;tgc&#39;: 2, &#39;tga&#39;: 1, &#39;aat&#39;: 1, &#39;atg&#39;: 1, &#39;gcc&#39;: 1, &#39;cat&#39;: 1, &#39;taa&#39;: 2, &#39;aaa&#39;: 2, &#39;aac&#39;: 2, &#39;ccg&#39;: 1, &#39;cga&#39;: 2, &#39;gac&#39;: 1, &#39;gat&#39;: 1, &#39;atc&#39;: 1, &#39;cta&#39;: 1, &#39;aca&#39;: 2, &#39;ccc&#39;: 1, &#39;caa&#39;: 1}</code></pre>
+<p>Now we see the counts for every codon that this sequence can produce, we can even determine the potential amino acid sequence in terms of codons using regex like this:</p>
+<pre class="python"><code>re.findall(r&quot;\w{3}&quot;, r.DNAseq)</code></pre>
+<pre><code>## [&#39;agg&#39;, &#39;tta&#39;, &#39;tta&#39;, &#39;gct&#39;, &#39;tcg&#39;, &#39;tac&#39;, &#39;tgt&#39;, &#39;gtt&#39;, &#39;tcc&#39;, &#39;acc&#39;, &#39;tcc&#39;, &#39;acc&#39;, &#39;agc&#39;, &#39;gga&#39;, &#39;agg&#39;, &#39;gag&#39;, &#39;tac&#39;, &#39;gct&#39;, &#39;cgc&#39;, &#39;gtg&#39;, &#39;ctg&#39;, &#39;aat&#39;, &#39;gcc&#39;, &#39;att&#39;, &#39;aaa&#39;, &#39;ccg&#39;, &#39;acg&#39;, &#39;atc&#39;, &#39;cta&#39;, &#39;cac&#39;, &#39;cct&#39;, &#39;taa&#39;, &#39;aca&#39;]</code></pre>
+<p>Here was a little morsel into the world of python and R and how they interact. Of course, I had to bring some biology into it and make it a whole lot cooler if you ask me.</p>
+<p>If you made it this far into the blog post, thanks for enduring me and my incessant need to bring genetics into literally every conversation I ever have.</p>
+
+              <hr>
+               <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+      
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; Ruth Raichur. Powered by <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="/js/docs.min.js"></script>
+<script src="/js/main.js"></script>
+
+<script src="/js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>

@@ -3,12 +3,12 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/post/2020/12/06/new-blog-post-test/</loc>
+    <loc>/post/</loc>
     <lastmod>2020-12-06T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/</loc>
+    <loc>/post/2020/12/06/r-and-python-interact/</loc>
     <lastmod>2020-12-06T00:00:00+00:00</lastmod>
   </url>
   
@@ -29,11 +29,6 @@
   
   <url>
     <loc>/project/project1/</loc>
-    <lastmod>2020-10-19T22:55:05-04:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/2020/10/19/r-and-python-when-two-worlds-collide/</loc>
     <lastmod>2020-10-19T22:55:05-04:00</lastmod>
   </url>
   
