@@ -43,7 +43,19 @@
       <description>  Check out some of my coding projects below:
  Wrangling &amp;amp; Exploratory Data Analysis
  Modeling, Inference, Prediction
+Check out some of my research projects below:
+ UCSC Genome Browser: Identifying direct transcriptional targets of Hedgehog signaling in limb development
+ Decipher Patient Case Study
   -- </description>
+    </item>
+    
+    <item>
+      <title>Proposed Gli Enhancer Target Gene *Osr2* Involved In Embryonic Limb Morphogenesis By Hedgehog Signal Regulation.</title>
+      <link>/project/project3/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/project/project3/</guid>
+      <description>Summary The purpose of this study was to identify a gene with intersecting Gli binding sites and H3K27ac hallmarks that have associations with human limb abnormalities. The intersection between HH responsive H3K27ac sites and Gli binding region identified 340 active Gli enhancers target genes with about 20+ sites mostly involved with limb, digit, and embryonic morphogenesis. One of these genes was selected for an in-depth analysis to determine the likelihood of Gli enhancers mediated Hedgehog signaling in this gene that regulates limb development.</description>
     </item>
     
     <item>
