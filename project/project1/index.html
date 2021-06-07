@@ -117,7 +117,7 @@ ratings1 &lt;- untidy_ratings %&gt;%
     pivot_longer(4:14, names_to = &quot;Year&quot;, values_to = &quot;Genre&quot;) %&gt;%
     na.omit() %&gt;%
     separate(Genre, into = c(&quot;primary_genre&quot;))</code></pre>
-<p>While my data was already tidy, it contained many variables that I did not intend on using. I used select() to isolate the variables of interest and then proceeded to untidy and retidy my data. To untidy my next_bechdel_test data, I created columns for each cast member’s gender and indicated whether their respective movie passed or failed the bechdel test in those columns. Similarly, I untidied by movie_ratings dataset by sorting the genres by the release year. After retidying my data, I noticed that multiple genres were listed on a column. Since having multiple genres would possibly complicate things, I picked the first listed genre as the “primary_genre” and used separate() to clean that column.</p>
+<p>While my data was already tidy, it contained many variables that I did not intend on using. I used select() to isolate the variables of interest and then proceeded to untidy and retidy my data. To untidy my next_bechdel_test data, I created columns for each cast member’s gender and indicated whether their respective movie passed or failed the bechdel test in those columns. Similarly, I untidied my movie_ratings dataset by sorting the genres by the release year. After retidying my data, I noticed that multiple genres were listed on a column. Since having multiple genres would possibly complicate things, I picked the first listed genre as the “primary_genre” and used separate() to clean that column.</p>
 </div>
 </div>
 <div id="joiningmerging" class="section level3">

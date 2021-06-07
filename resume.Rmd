@@ -6,4 +6,4 @@ hiderelated: true
 hidediscus: true
 ---
 
-<iframe src="/resume_files/updatedresume2021.'2020-11-23T22:55:05-04:00'pdf" width="100%" height="1000" border="0"></iframe>
+<iframe src="/resume_files/updatedresume2021.pdf"width="100%" height="1000" border="0"></iframe>

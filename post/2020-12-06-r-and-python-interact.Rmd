@@ -15,19 +15,19 @@ To summarize, gene expression is the process that reads our DNA and converts it 
 ![](https://www.genome.gov/sites/default/files/tg/en/illustration/gene_expression_adv.jpg)
 *Image credit <a href="https://www.genome.gov/genetics-glossary/Gene-Expression"> National Human Genome Research Institute </a> *
 
-The image above illustrates this process in detail, notice how mode of "communication" changes multiple times as we start with DNA which is processed to mRNA which can then be read by ribosomes and converted into an animo acid sequence - the functional product (proteins). 
+The image above illustrates this process in detail, notice how mode of "communication" changes multiple times as we start with DNA which is processed to mRNA which can then be read by ribosomes and converted into an amino acid sequence - the functional product (proteins). 
 
 I would like to think the interactions between R and Python are comparable to the molecular interactions in gene expression. After all, they do both work with "code."
 
 ### Coding in R: Everyone Needs a Home Base
-In the same way that the mRNA acts as an instruction manual for the production of proteins and can be considered the "base" sequence, learning R as a base coding language prepares you for the great, big functional world of so many other (more powerful) coding languages that are available. Now this is not to say that R is not powerful or does not have the ability to cause stress induced panics and frustrations that most coding languages come with, but speaking for myself and many other pure research noobs who are first introduced to the whizzing world of programming by learning R, we can look at R as home base. Like mRNA, it is pretty simple and pretty close to home (DNA or in our case, English). The learning curve is minimal and pretty enjoyable if you ask me!
+In the same way that the mRNA acts as an instruction manual for the production of proteins and can be considered the "base" sequence, learning R as a base coding language prepares you for the great, big functional world of so many other (more powerful) coding languages that are available. Now this is not to say that R is not powerful or does not have the ability to cause stress induced panics and frustrations that most coding languages come with, but speaking for myself and many other pure research noobs who are first introduced to the whizzing world of programming by learning R, we have come to treat R as home base. Like mRNA, it is pretty simple and pretty close to home (DNA or in our case, English). The learning curve is minimal and pretty enjoyable if you ask me.
 
 Let's generate a string of a random DNA sequence!
 ```{r}
 DNAseq <- c("aggttattagcttcgtactgtgtttccacctccaccagcggaagggagtacgctcgcgtgctgaatgccattaaaccgacgatcctacacccttaaacaa")
 ```
 
-But of course, as the very nature of our beings yearn for more sophistication and intricacy, so does our journey into the world of big data and programming. We want more; more depth, more power and more complexity (sometimes I really wonder why).
+But of course, as the very nature of our beings yearn for more sophistication and intricacy, so does our journey into the world of big data and programming. We want more; more depth, more power and, more complexity (sometimes I really wonder why).
 
 ### The Mighty Python: Oh, The Places We'll Go!
 So here's Python, comparable to amino acid sequences that determine EVERYTHING about us. A total game changer compared to R. Mighty Python is a functional language. It is versatile and as it appears, a lot more powerful than R (but also much more capable of making you want to scream into a pillow). Even with the minimal exposure I've had with Python, I have seen the additional tools and power this language has and it is intriguing. 
@@ -68,16 +68,16 @@ count_chars(lovelylist)
 ```
 
 So that's pretty neat right? 
-Before we continue to exhibit the cool features of "The Mighty Python" I must introduce you to our mediator. 
+But, before we continue to exhibit the cool features of "The Mighty Python," I must introduce you to our mediator. 
 
 ### The Reticulate Function: The Ribosome That Reads R to Python (and vice verse)
 For the full process of gene expression to be complete, mRNA and the amino acids must find a medium to interact by which proteins can be sequenced as the mRNA dictates, this is done so with the assistance of the ribosome. Similar to the ribosome, in R we have a package called reticulate. With reticulate we can allow information to be shared and understood between R and Python. 
 
 Here's a pretty cool illustration:
 
-Remember that R string we created way back when? We can use that string combined with the cool packages and functions in Python to make something out of what is seemingly a useless string of A T G Cs. 
+Remember that R string we created? We can use that string combined with the cool packages and functions in Python to make something out of what is seemingly a useless string of A T G Cs. 
 
-First here's an R chunck looking at the string and loading the reticulate package
+First here's an R chunk looking at the string and loading the reticulate package
 ```{r}
 DNAseq
 library(reticulate)
