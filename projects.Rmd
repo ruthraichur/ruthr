@@ -15,9 +15,9 @@ Check out some of my coding projects below:
 
 Check out some of my research projects below:
 
-<i class="fa fa-signal"></i> &nbsp; [UCSC Genome Browser: Identifying direct transcriptional targets of Hedgehog signaling in limb development](/project/project3/)
+<i class="fa fa-dna"></i> &nbsp; [UCSC Genome Browser: Identifying direct transcriptional targets of Hedgehog signaling in limb development](/project/project3/)
 
-<i class="fa fa-line-chart"></i> &nbsp; [Decipher Patient Case Study](/project/project4/)
+<i class="fa fa-users-medical"></i> &nbsp; [Decipher Patient Case Study](/project/project4/)
 
 <!--
 <i class="fa fa-pie-chart"></i> 
