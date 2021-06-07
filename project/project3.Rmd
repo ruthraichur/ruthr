@@ -1,7 +1,6 @@
 ---
-title: 'Proposed Gli Enhancer Target Gene *Osr2* Involved In Embryonic Limb Morphogenesis By Hedgehog Signal Regulation.'
+title: 'Proposed Gli Enhancer Target Gene Osr2 Involved In Embryonic Limb Morphogenesis By Hedgehog Signal Regulation.'
 author: "Ruth Raichur"
-date:
 output:
   html_document:
     toc: yes
@@ -20,11 +19,11 @@ tidy=TRUE, tidy.opts=list(width.cutoff=60), R.options=list(max.print=100))
 <P style="page-break-before: always">
 \newpage
 
-### Summary 
+## Summary 
 
 The purpose of this study was to identify a gene with intersecting Gli binding sites and H3K27ac hallmarks that have associations with human limb abnormalities. The intersection between HH responsive H3K27ac sites and Gli binding region identified 340 active Gli enhancers target genes with about 20+ sites mostly involved with limb, digit, and embryonic morphogenesis. One of these genes was selected for an in-depth analysis to determine the likelihood of Gli enhancers mediated Hedgehog signaling in this gene that regulates limb development. Using the intersection on GREAT software, *Osr2* was identified to have an effect on human embryonic limb morphogenesis and was chosen as the gene of interest. Upon further study, there appeared to be strong evidence suggesting that *Osr2* is a potential Gli target gene and is hypothesized to be regulated by the Hedgehog mechanism. 
 
-### Introduction
+## Introduction
 
 The Sonic Hedgehog (Shh) gene encodes for a protein that has the properties of a morphogen specifying the positional values across the antero-posterior axis of the limb (Tickel and Baker, 2012). On a transcriptional level, research has shown this signaling controls cellular differentiation in both dose dependence and time of Shh exposure. It has been studied to have long range effects as well as work in collaboration with numerous other signaling pathways (Dessaud et.al, 2007). Defects in the response to altered Shh signaling have been found to underlie inherited disorders that include polydactyly and several other clinical conditions with congenital limb defects (Tickel and Towers, 2017).
 
@@ -32,7 +31,7 @@ Enhancers are cis-regulatory elements that coordinate transcription in the cell 
 
 This intersection between Gli binding regions and HH responsive H3K27ac sites on a mouse dataset revealed a potential target gene, *Osr2*. This gene is known to be a member of highly conserved zinc-finger transcription factors (Orgeur et.al, 2018) that most likely contributes to normal limb development in humans as they have been observed to be required factors in leg joint formation in Drosophila and expressed in synovial joint cells in mice (Gao et.al, 2011). 
 
-### Description of findings
+## Description of findings
 
 ChiP-Seq datasets (Lex et al, 2020) were used on the UCSC Genome Browser for this study. The first dataset contained all 2,113 HH-responsive H3K27ac enriched regions in the mouse limb bud. This was intersected with a dataset that mapped all the Gli Binding regions (GBR) that have active enhancer markers. The table browser tool on the UCSC Genome Browser was used to perform an intersection that mapped any overlap between these two tracks (Session links included in the ‘Graphical’ section). GREAT was used to analyze the intersection, predicting the target genes associated with the near active enhancers. These regions are identified as potential Gli binding regions. This software provided a summary table of all genomic region-gene association table (Table 2) which identified regions associations and their chromosome coordinates that would help further verify their location relative to the Gli binding regions.
 
@@ -42,7 +41,7 @@ Using the list of GO biological processes that identified intersections between 
 
 *Osr2* is a member of the odd-skipped gene family seen to act as a regulator of palatal growth and patterning of the endoderm, heart, teeth, bones and synovial joints in the limbs in mammals (Neto et.al, 2012). There are no known human limb defects caused by mutations in this gene but *Osr2* is seen to be expressed with Osr1 during later stages of limb development in developing joints suggesting a crucial role in human limb development (Neto et.al, 2012). *Osr2*’s role in regulation of limb development is seen to be evolutionarily conserved as reduction in *Osr2* function in zebrafish was seen to impair fin development by failure of gene maintenance in the developing pectoral fin bud (Neto et al, 2012). 
 
-### Discussion and Conclusion
+## Discussion and Conclusion
 
 With the understanding of the relationship between Gli proteins in their regulation of H3K27ac enrichment, a prediction of potential Gli target sites regulated by HH signaling in the mouse genome could be made by running an intersection that mapped HH responsive H3K27ac sites against all Gli binding regions (Lex et.al, 2020). The strategy analyzed the Gli3-H3K27ac intersection on GREAT and identified 340 potential Gli target genes (Table 2). This is perhaps an overestimation considering the strategy only consisted of the single criteria of an HH responsive H3K27ac sites having any overlap with a Gli binding region. Therefore, it is unlikely that all identified intersecting genes are Gli target regions.
 
@@ -54,7 +53,7 @@ While it is known that *Osr2* plays a crucial role in limb development, so far, 
 
 To experimentally confirm this role of Shh signaling, In-situ hybridization using cDNA complementary to the *Osr2* gene can be performed to study it’s localization in the antero-posterior axis of the limb in an Shh knockout embryo compared to WT. We would expect to see decreased or no localization of *Osr2* in the Shh knockout compared to WT. This would suggest HH dependence of *Osr2*’s role in limb morphogenesis.
 
-### Graphical 
+## Graphical 
 
 Table 1: Custom tracks from UCSC Genome Browser used for analysis.
 *“User Track” is the intersection track created between the Gli3 sites and HH responsive H3K27ac sites that show 280 sites. “Gli_Limb_Binding_Endogenous_mm10” is track mapping the 7282 Gli3 binding regions on the mouse genome while the “HH_responsive_H3K27ac_mm10” shows the Chip-Seq data mapping the 2113 hedgehog responsive H3K27 acetylated binding regions on the same genome both obtained from Lex et al, 2020.*
@@ -73,7 +72,7 @@ UCSC Genome Browser mapping the intersection: <a href = http://genome.ucsc.edu/s
 
 This project was completed under the guidance of Dr. Vokes during the Human Genetics (BIO 325T) course of spring 2021.
 
-### References
+## References
  
 Andersson, R., & Sandelin, A. (2019). Determinants of enhancer and promoter activities of regulatory elements. Nature Reviews Genetics, 21(2), 71–87. https://doi.org/10.1038/s41576-019-0173-8
 
@@ -101,7 +100,7 @@ Yao, J., Chen, J., Li, L.-Y., & Wu, M. (2020). Epigenetic plasticity of enhancer
 
 Zhou, J., Gao, Y., Lan, Y., Jia, S., & Jiang, R. (2013). Pax9 regulates a molecular network involving Bmp4, Fgf10, Shh signaling and the Osr2 transcription factor to control palate morphogenesis. Development, 140(23), 4709–4718. https://doi.org/10.1242/dev.099028
 
-#### Supplemental Data
+## Supplemental Data
 
 Table 2: Potential Nearby Gli3 Target Genes and their chromosomal coordinates. 
 
