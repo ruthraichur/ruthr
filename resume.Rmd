@@ -6,4 +6,4 @@ hiderelated: true
 hidediscus: true
 ---
 
-<iframe src="/resume_files/updatedresume2021.pdf"width="100%" height="1000" border="0"></iframe>
+<iframe src="/resume_files/resume_grad.pdf"width="100%" height="1000" border="0"></iframe>
