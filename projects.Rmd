@@ -15,7 +15,7 @@ Check out some of my coding projects below:
 
 <i class="fa fa-line-chart"></i> &nbsp; [Modeling, Inference, Prediction](/project/project2/)
 
-<i class="fa fa-chart-scatter"></i> &nbsp; [RNA-Seq Project](/project/project5/)
+<i class="fa fa-th" aria-hidden="true"></i> &nbsp; [RNA-Seq Project](/project/project5/)
 
 Check out some of my research projects below:
 

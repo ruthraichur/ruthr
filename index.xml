@@ -53,6 +53,22 @@
     </item>
     
     <item>
+      <title>Projects</title>
+      <link>/projects/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/</guid>
+      <description> Check out some of my coding projects below:
+ Wrangling &amp;amp; Exploratory Data Analysis
+ Modeling, Inference, Prediction
+ RNA-Seq Project
+Check out some of my research projects below:
+ UCSC Genome Browser: Identifying direct transcriptional targets of Hedgehog signaling in limb development
+ Decipher Patient Case Study
+  -- </description>
+    </item>
+    
+    <item>
       <title>Resume</title>
       <link>/resume/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
