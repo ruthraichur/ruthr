@@ -102,7 +102,7 @@ print(gg)
 
 The next task sought to isolate genes from a larger gene dataset, "gene_sets." The dataset was filtered for genes with the Gene Ontology ID, GO:0006090, associated with the pyruvate metabolic process. The remaining genes were matched to the descriptions and symbols listed on another dataset called "geneNamesAndDescriptions." This new data frame was saved as "rr_gene_sets."
 ```{r}
-gene_sets = read.delim("~/Documents/School/BIO321G_Computational Biology/gene_sets.tsv.gz")
+gene_sets = read.delim("gene_sets.tsv.gz")
 
 rr_gene_sets = gene_sets %>% filter(gene_ontology_primary_id == "GO:0006090")
 
