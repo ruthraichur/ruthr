@@ -128,7 +128,7 @@ lgGo = data.frame(lgGo, check.names = FALSE)
 ### 6. Principal Component Analysis (PCA) of genes associated with the pyruvate metabolic process
 
 The filtered lgNorm dataset was used to build another PCA plot. Comparing this plot to the plot with the full gene set (Graph 1)
-will determine if the expression patterns between mutants in different conditions vary once filtered by the genes associared with the pyruvate metabolic process. The plots appear to remain similar in trend, with the groups clustering in the same pattern as in Graph 1. There is some noticeable difference with the WT and 4G dark cluster (dark green, dark grey), as it moved higher up PC2. This means that the expression pattern for this cluster is less explained by PC2 as it moves closer the center.
+will determine if the expression patterns between mutants in different conditions vary once filtered by the genes associared with the pyruvate metabolic process. The plots appear to remain similar in trend, with the groups clustering in the same pattern as in Graph 1. There is some noticeable difference with the WT and 4G dark cluster (dark green, dark blue), as it moved higher up PC2. This means that the expression pattern for this cluster is less explained by PC2 as it moves closer the center.
 ```{r}
 pca2 = prcomp(t(lgGo))
 class(pca2)

@@ -6,7 +6,19 @@
     <description>Recent content on Ruth Raichur</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Fri, 30 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 19 Nov 2021 22:55:05 -0400</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RNA-Seq Final Project</title>
+      <link>/project/project5/</link>
+      <pubDate>Fri, 19 Nov 2021 22:55:05 -0400</pubDate>
+      
+      <guid>/project/project5/</guid>
+      <description>source(&amp;quot;bio321g_rnaseq_utils.R&amp;quot;) This report analyzes the RNA-seq expression patterns of a dataset focused on varying genotypes of Arabidopsis thaliana. We are primarily interested in understanding how the differences in gene expression between the light and dark conditions vary by genotype.
+The RNA-seq data consists of sample genotypes with the following description matching each code:
+ Col: wild-type Arabidopsis thaliana. (WT).
+ 14B: a mutant lacking two genes for a plant specific translation initiation factor, eIFiso4G1 (AT5g57870) and eIFiso4G2 (At2g24050).</description>
+    </item>
+    
     <item>
       <title>Missense mutations in genes Chd2 and Myocd interacting with Myod1 likely cause abnormal skeletal phenotypes that predispose preterm birth by premature rupture of membranes.</title>
       <link>/project/project4/</link>
