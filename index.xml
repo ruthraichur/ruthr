@@ -6,11 +6,11 @@
     <description>Recent content on Ruth Raichur</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Fri, 19 Nov 2021 22:55:05 -0400</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 23 Nov 2021 22:55:05 -0400</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>RNA-Seq Final Project</title>
       <link>/project/project5/</link>
-      <pubDate>Fri, 19 Nov 2021 22:55:05 -0400</pubDate>
+      <pubDate>Tue, 23 Nov 2021 22:55:05 -0400</pubDate>
       
       <guid>/project/project5/</guid>
       <description>source(&amp;quot;bio321g_rnaseq_utils.R&amp;quot;) This report analyzes the RNA-seq expression patterns of a dataset focused on varying genotypes of Arabidopsis thaliana. We are primarily interested in understanding how the differences in gene expression between the light and dark conditions vary by genotype.

@@ -61,7 +61,7 @@
         </div>
         <div class="blog-title">
           <h4>
-          November 19, 2021 
+          November 23, 2021 
             &nbsp;&nbsp;
             
           </h4>
@@ -160,7 +160,7 @@ lgGo = data.frame(lgGo, check.names = FALSE)</code></pre>
 <div id="principal-component-analysis-pca-of-genes-associated-with-the-pyruvate-metabolic-process" class="section level3">
 <h3>6. Principal Component Analysis (PCA) of genes associated with the pyruvate metabolic process</h3>
 <p>The filtered lgNorm dataset was used to build another PCA plot. Comparing this plot to the plot with the full gene set (Graph 1)
-will determine if the expression patterns between mutants in different conditions vary once filtered by the genes associared with the pyruvate metabolic process. The plots appear to remain similar in trend, with the groups clustering in the same pattern as in Graph 1. There is some noticeable difference with the WT and 4G dark cluster (dark green, dark grey), as it moved higher up PC2. This means that the expression pattern for this cluster is less explained by PC2 as it moves closer the center.</p>
+will determine if the expression patterns between mutants in different conditions vary once filtered by the genes associared with the pyruvate metabolic process. The plots appear to remain similar in trend, with the groups clustering in the same pattern as in Graph 1. There is some noticeable difference with the WT and 4G dark cluster (dark green, dark blue), as it moved higher up PC2. This means that the expression pattern for this cluster is less explained by PC2 as it moves closer the center.</p>
 <pre class="r"><code>pca2 = prcomp(t(lgGo))
 class(pca2)</code></pre>
 <pre><code>## [1] &quot;prcomp&quot;</code></pre>
@@ -201,13 +201,6 @@ pheatmap(heatData, color = heatPalette, clustering_method = &quot;average&quot;,
 <div id="stripchart-of-expression-data" class="section level3">
 <h3>8. Stripchart of expression data</h3>
 <p>Using the p-values created by the results of DESeqMatrix created, the expression data filtered for genes associated with the pyruvate metabolic process is ordered by increasing p-values. Nine genes with the lowest p-values from this data is mapped in a strip chart, sorted by gene. The expression for each genotype sample is compared between light and dark conditions. The nine genes displayed are as follows: <em>FBA1, FBA6, GAPA, PGK1, HDR, AT4G25280, PKp3, HKL1, PKP-ALPHA.</em></p>
-<p>Of the nine genes; <em>FBA1</em> and <em>PKP-ALPHA</em> follow similar trends within each phenotype in light and dark conditions. For the 14B mutants, the expression levels are the same or overlapping. In the case of the 4G mutants, the expression level in the dark condition is higher than the expression in the light condition. The same expression pattern is observed with the COL (WT) samples.</p>
-<p>The genes <em>GAPA</em> and <em>HKL1</em> have similar expression patterns. The 14B mutants are spread with the expression in the light condition being generally higher and dark conditions being lower. There seems to be some overlap in level of expression as well. In the 4G mutants, the expression level of the dark condition mutants are higher than the ones in the light condition. The same expression pattern is observed with the COL (WT) samples however in HKL1, the expression levels are significantly closer than for GAPA.</p>
-<p>The rest of the genes have varying patterns that are broadly similar depending on mutants.</p>
-<p>For the mutant 14B; the expression levels for genes <em>FBA6, PGK1, GAPA</em> and <em>PKp3</em> are high in the light conditions and lower in dark conditions. Genes <em>HDR</em> and <em>AT4G25280</em> have the opposite pattern of expression. <em>FBA1, PKP-ALPHA,</em> and <em>HKL-1</em> show overlapping expression patterns of both conditions.</p>
-<p>Considering the 4G mutants, the expression levels for genes <em>FBA1, FBA6, GAPA, HDR, HKL1</em> and <em>PKP-ALPHA</em> are low in the light conditions and lower in light conditions. <em>PKG1</em> is the only gene that shows the opposite pattern of expression. <em>AT4G25280</em> and <em>PKp3</em> show overlapping expression patterns of both conditions.</p>
-<p>In the COL (WT) samples, the expression levels for genes <em>FBA1, GAPA, HDR, AT4G25280, HKL1</em> and <em>PKP-ALPHA</em> are low in the light conditions and lower in light conditions. <em>PKG1</em> gene has the opposite pattern of expression. <em>FBA6</em> and <em>PKp3</em> show overlapping expression patterns of both conditions.</p>
-<p>A large number of genes with mutant 14B show a high expression in light conditions while the opposite trend is observed with 4G mutants and WT phenotypes where the high expression are in dark conditions. The COL and 4G samples have more genes following the same expression patterns. In conclusion, we observe a stronger relationship in expression patterns in both the whole gene RNA-seq data and the pyruvate metabolic process for the 4G mutants as the WT samples. The general pattern shows lower expression in light conditions and higher expression in dark conditions. In contrast, we can conclude that the 14B mutant affecting the plant specific translation initiation factor, tend to have higher expression patterns in light conditions and lower expression in the dark.</p>
 <pre class="r"><code>lowestp = data.frame(dssresults[order(dssresults$pvalue), ])
 sorted_data = lgGo[rownames(lowestp), ]
 sorted_data = sorted_data[!is.na(sorted_data), ]
@@ -218,6 +211,13 @@ expression_level = stripchart321g(expression_data, sampleAnnotation,
 print(expression_level)</code></pre>
 <p><img src="/project/project5_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p><em>Graph 4: Stripchart of gene expression for the different genotypes in light and dark conditions for the lowest nine p-values</em></p>
+<p>Of the nine genes; <em>FBA1</em> and <em>PKP-ALPHA</em> follow similar trends within each phenotype in light and dark conditions. For the 14B mutants, the expression levels are the same or overlapping. In the case of the 4G mutants, the expression level in the dark condition is higher than the expression in the light condition. The same expression pattern is observed with the COL (WT) samples.</p>
+<p>The genes <em>GAPA</em> and <em>HKL1</em> have similar expression patterns. The 14B mutants are spread with the expression in the light condition being generally higher and dark conditions being lower. There seems to be some overlap in level of expression as well. In the 4G mutants, the expression level of the dark condition mutants are higher than the ones in the light condition. The same expression pattern is observed with the COL (WT) samples however in HKL1, the expression levels are significantly closer than for GAPA.</p>
+<p>The rest of the genes have varying patterns that are broadly similar depending on mutants.</p>
+<p>For the mutant 14B; the expression levels for genes <em>FBA6, PGK1, GAPA</em> and <em>PKp3</em> are high in the light conditions and lower in dark conditions. Genes <em>HDR</em> and <em>AT4G25280</em> have the opposite pattern of expression. <em>FBA1, PKP-ALPHA,</em> and <em>HKL-1</em> show overlapping expression patterns of both conditions.</p>
+<p>Considering the 4G mutants, the expression levels for genes <em>FBA1, FBA6, GAPA, HDR, HKL1</em> and <em>PKP-ALPHA</em> are low in the light conditions and lower in light conditions. <em>PKG1</em> is the only gene that shows the opposite pattern of expression. <em>AT4G25280</em> and <em>PKp3</em> show overlapping expression patterns of both conditions.</p>
+<p>In the COL (WT) samples, the expression levels for genes <em>FBA1, GAPA, HDR, AT4G25280, HKL1</em> and <em>PKP-ALPHA</em> are low in the light conditions and lower in light conditions. <em>PKG1</em> gene has the opposite pattern of expression. <em>FBA6</em> and <em>PKp3</em> show overlapping expression patterns of both conditions.</p>
+<p>A large number of genes with mutant 14B show a high expression in light conditions while the opposite trend is observed with 4G mutants and WT phenotypes where the high expression are in dark conditions. The COL and 4G samples have more genes following the same expression patterns. In conclusion, we observe a stronger relationship in expression patterns in both the whole gene RNA-seq data and the pyruvate metabolic process for the 4G mutants as the WT samples. The general pattern shows lower expression in light conditions and higher expression in dark conditions. In contrast, we can conclude that the 14B mutant affecting the plant specific translation initiation factor, tend to have higher expression patterns in light conditions and lower expression in the dark.</p>
 </div>
 
               <hr>
