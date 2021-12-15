@@ -5,6 +5,7 @@ date: "2021-11-23T22:55:05-04:00"
 output: html_document
 ---
 ```{r setup, include=FALSE}
+library(knitr)
 knitr::opts_chunk$set(echo = TRUE, eval = TRUE, fig.align = "center", warning = F, message = F,
 tidy=TRUE, tidy.opts=list(width.cutoff=60), R.options=list(max.print=100))
 

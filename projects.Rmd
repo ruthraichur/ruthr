@@ -23,7 +23,7 @@ Check out some of my research projects below:
 
 <i class="fa fa-child"></i> &nbsp; [Decipher Patient Case Study](/project/project4/)
 
-<i class="fa fa-sort-amount-desc"></i> &nbsp; [Reversing the effects of hypermethylation on BRCA1 by CRISPR/Cas9 technology](/project/project6.1/)
+<i class="fa fa-sort-amount-desc"></i> &nbsp; [Reversing the effects of hypermethylation on BRCA1 by CRISPR/Cas9 technology](/project/project6/)
 
 <!--
 <i class="fa fa-pie-chart"></i> 
