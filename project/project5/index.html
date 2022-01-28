@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Ruth Raichur" />
+    
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico">
+    <title>RNA-Seq Final Project</title>
+    <meta name="generator" content="Hugo 0.92.1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="/projects/">PROJECTS</a></li>
+        
+        <li><a href="/resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="/project/project5/">RNA-Seq Final Project</a></strong>
+          </h3>
+        </div>
+ 
+<div class="blog-title">
+          <h4>
+         November 23, 2021 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<pre class="r"><code>source(&quot;bio321g_rnaseq_utils.R&quot;)</code></pre>
+<p>This report analyzes the RNA-seq expression patterns of a dataset focused on varying genotypes of <em>Arabidopsis thaliana</em>. We are primarily interested in understanding how the differences in gene expression between the light and dark conditions vary by genotype.</p>
+<p>The RNA-seq data consists of sample genotypes with the following description matching each code:</p>
+<ul>
+<li><p>Col: wild-type <em>Arabidopsis thaliana.</em> (WT).</p></li>
+<li><p>14B: a mutant lacking two genes for a plant specific translation initiation factor, eIFiso4G1 (AT5g57870) and eIFiso4G2 (At2g24050).</p></li>
+<li><p>4G: a mutant lacking the one gene for eIF4G (AT3g60240), a translation factor that is more similar to those of other eukaryotes.</p></li>
+</ul>
+<p>The two light/dark conditions being compared are “ENDDAY” for light and “EXDARK” for dark.</p>
+<div id="modelling-significance-timegenotype-interactions" class="section level3">
+<h3>1. Modelling significance time:genotype interactions</h3>
+<p>The first task sought to elucidate the number of genes where a significant time:geneotype interaction term for a false discovery rate (FDR) ≤0.10 using the DESeq function in the DESeq2 package. This function models the interactions similar to a two-way ANOVA test. The DESeq specifically modeled the significance of the interaction term time:genotype by setting the design. Using the DESeq2 package, a matrix was created using rnaCounts as the countData, and sampleAnnotation that listed the specifications of mutations in each sample.</p>
+<p>In this dataset, 1429 genes were found to have significant time:genotype interaction. The expected number of false positive discoveries out of the list of 1429 genes with evidence of significant interaction term is 142.9 using the 10% FDR.</p>
+<pre class="r"><code>DESeqDataSet = DESeqDataSetFromMatrix(countData = rnaCounts,
+    colData = sampleAnnotation, design = ~time + genotype + time:genotype)
+
+dss = DESeq(DESeqDataSet, test = &quot;LRT&quot;, reduced = ~time + genotype)
+
+dssresults = results(dss)
+res = dssresults[!is.na(dssresults$padj), ]
+sig = res[res$padj &lt; 0.1, ]
+sig_genes = rownames(sig)
+
+length(sig_genes)</code></pre>
+<pre><code>## [1] 1429</code></pre>
+<pre class="r"><code>0.1 * 1429</code></pre>
+<pre><code>## [1] 142.9</code></pre>
+</div>
+<div id="normalizing-data" class="section level3">
+<h3>2. Normalizing data</h3>
+<p>The data from the DESeq modeling the interaction between time and geneotype was then normalized with the DESeq function normed and log-transformed with an offset of 1. This is saved as “lgNorm.”</p>
+<pre class="r"><code>normed = counts(dss, normalized = TRUE)
+write.table(data.frame(gene = rownames(normed), normed), &quot;neves_deseq_normalized.tsv&quot;,
+    sep = &quot;\t&quot;, row.names = FALSE, quote = FALSE)
+normed = normed[rowSums(normed) &gt; 0, ]
+lgNorm = log2(normed + 1)
+dim(lgNorm)</code></pre>
+<pre><code>## [1] 18396    15</code></pre>
+</div>
+<div id="principal-component-analysis-pca-of-all-gene-expression-data" class="section level3">
+<h3>3. Principal Component Analysis (PCA) of all gene expression data</h3>
+<p>Using the normalized data, a principal component analysis (PCA) plot was generated. The points in the plot was colored according to which group they are assigned according to the file rna_sample_annotation.tsv.</p>
+<p>Along the PC1 direction, there is a clear separation of samples in the light and dark conditions, with none that lie within -50 to +50. Groups that were in the light conditions (orange, grey, light blue) group beyond the -50 end of the PC1 while groups in the dark condition (red, dark blue, dark green) group at the +50 end along PC1.</p>
+<p>Along the PC2 direction, there is a separation of samples by genotype. We observe the 14B mutants (orange, red), lacking plant specific initiation factors, on the top +40 region of PC2 while the COL (WT) sample and 4G mutant (grey, light blue, dark blue, dark green), lacking a translation factor, on the bottom -20 region.</p>
+<p>The overall PCA graph shows clustering by both genotype and light/dark conditions for the 14B mutants while the 4G mutants cluster with WT by light/dark conditions but not genotype. This pattern suggests that the 4G mutants more strongly mimic the expression patterns of WT in both light and dark conditions while 14B mutants only match expression patterns of WT when compared by the PC1 variable and not PC2.</p>
+<pre class="r"><code>pca = prcomp(t(lgNorm))
+class(pca)</code></pre>
+<pre><code>## [1] &quot;prcomp&quot;</code></pre>
+<pre class="r"><code>## set up data.frame pcaData for ggplot...
+pcaData = data.frame(pca$x[, 1:2])
+## add in sample annotation info
+pcaData$group = sampleAnnotation[rownames(pcaData), &quot;group&quot;]
+## and sample names
+pcaData$sample = rownames(pcaData)
+## bw theme...
+theme_set(theme_bw())
+gg = ggplot(pcaData, aes(x = PC1, y = PC2, color = group, label = sample))
+gg = gg + geom_point(size = 2.5, alpha = 0.75)
+gg = gg + scale_color_manual(values = groupColors)
+print(gg)</code></pre>
+<p><img src="/project/project5_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><em>Graph 1: Principal Component Analysis of expression data in the full gene set, samples colored by different mutants at either light or dark conditions</em></p>
+</div>
+<div id="filtering-for-genes-associated-with-the-pyruvate-metabolic-process" class="section level3">
+<h3>4. Filtering for genes associated with the pyruvate metabolic process</h3>
+<p>The next task sought to isolate genes from a larger gene dataset, “gene_sets.” The dataset was filtered for genes with the Gene Ontology ID, <a href="GO:0006090" class="uri">GO:0006090</a>, associated with the pyruvate metabolic process. The remaining genes were matched to the descriptions and symbols listed on another dataset called “geneNamesAndDescriptions.” This new data frame was saved as “rr_gene_sets.”</p>
+<pre class="r"><code>gene_sets = read.delim(&quot;gene_sets.tsv.gz&quot;)
+
+rr_gene_sets = gene_sets %&gt;%
+    filter(gene_ontology_primary_id == &quot;GO:0006090&quot;)
+
+rr_gene_sets = inner_join(rr_gene_sets, geneNamesAndDescriptions,
+    by = &quot;gene&quot;)
+
+rr_gene_sets = rr_gene_sets %&gt;%
+    select(gene, symbol, description)</code></pre>
+<pre class="r"><code>write.table(data.frame(rr_gene_sets), &quot;rr_gene_sets.tsv&quot;, sep = &quot;\t&quot;,
+    row.names = FALSE, quote = FALSE)</code></pre>
+</div>
+<div id="matching-filtered-genes-with-timegenotype-interaction-data" class="section level3">
+<h3>5. Matching filtered genes with time:genotype interaction data</h3>
+<p>Using the “rr_gene_sets” data that selected for genes associated with the pyruvate metabolic process, the lgNorm dataset was filtered for matching genes. This paired the genes associated with the specific biological process with the RNA-seq data that was processed with DESeq to obtain the time:genotype interaction.</p>
+<pre class="r"><code>lgGo = lgNorm[rr_gene_sets$gene, ]
+lgGo = data.frame(lgGo, check.names = FALSE)</code></pre>
+</div>
+<div id="principal-component-analysis-pca-of-genes-associated-with-the-pyruvate-metabolic-process" class="section level3">
+<h3>6. Principal Component Analysis (PCA) of genes associated with the pyruvate metabolic process</h3>
+<p>The filtered lgNorm dataset was used to build another PCA plot. Comparing this plot to the plot with the full gene set (Graph 1)
+will determine if the expression patterns between mutants in different conditions vary once filtered by the genes associared with the pyruvate metabolic process. The plots appear to remain similar in trend, with the groups clustering in the same pattern as in Graph 1. There is some noticeable difference with the WT and 4G dark cluster (dark green, dark blue), as it moved higher up PC2. This means that the expression pattern for this cluster is less explained by PC2 as it moves closer the center.</p>
+<pre class="r"><code>pca2 = prcomp(t(lgGo))
+class(pca2)</code></pre>
+<pre><code>## [1] &quot;prcomp&quot;</code></pre>
+<pre class="r"><code>## set up data.frame pcaData for ggplot...
+pcaData2 = data.frame(pca2$x[, 1:2])
+## add in sample annotation info
+pcaData2$group = sampleAnnotation[rownames(pcaData2), &quot;group&quot;]
+## and sample names
+pcaData2$sample = rownames(pcaData2)
+## bw theme...
+theme_set(theme_bw())
+gg2 = ggplot(pcaData2, aes(x = PC1, y = PC2, color = group, label = sample))
+gg2 = gg2 + geom_point(size = 2.5, alpha = 0.75)
+gg2 = gg2 + scale_color_manual(values = groupColors)
+print(gg2)</code></pre>
+<p><img src="/project/project5_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><em>Graph 2: Principal Component Analysis of expression data for the Gene Ontology biological process pyruvate metabolism, samples colored by different mutants at either light or dark conditions</em></p>
+</div>
+<div id="clustered-heatmap-of-differences-in-gene-expression-data" class="section level3">
+<h3>7. Clustered heatmap of differences in gene expression data</h3>
+<p>The pattern of gene expression for each mutant sample under the light or dark condition is visualized by a clustered heatmap of the differences in each gene’s (log-transformed normalized) expression level from their mean. The dynamic range exhibited in the heatmap is limited by setting any expression level difference greater than 2 log2 units greater than the mean to +2 and any expression level difference less than 2 log2 units less than the mean to -2.</p>
+<p>The two largest clusters before everything is joined together in the dendogram is separated by the day and night conditions. As seen in the PCA, the clusters further split the 14B mutants from the 4G and COL (WT) samples. Interestingly, on either side of the light/dark conditions, a few clades show some 4G samples to be more closely related to the COL (WT) samples than other 4G samples.</p>
+<p>Within each genes, an opposite expression trend is observed within the different mutant samples. The higher the expression of the gene in dark conditions, the lower the expression in light conditions. The one anomaly the <em>NADP-ME1</em> gene, where a COL (WT) and 4G sample in the light condition show high expression when low expression is expected and seen with other samples of the same phenotypes.</p>
+<pre class="r"><code># difference in each gene&#39;s expression level from it&#39;s mean
+heatData = lgGo - rowMeans(lgGo)
+
+# limiting the dynamic range
+heatData[heatData &gt; 2] = 2
+heatData[heatData &lt; -2] = -2
+
+# heatmap
+pheatmap(heatData, color = heatPalette, clustering_method = &quot;average&quot;,
+    labels_row = geneNamesAndDescriptions[rownames(heatData),
+        &quot;symbol&quot;])</code></pre>
+<p><img src="/project/project5_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><em>Graph 3: Clustered Heatmap of differences in gene expression for each sample of the different genotypes in light and dark conditions</em></p>
+</div>
+<div id="stripchart-of-expression-data" class="section level3">
+<h3>8. Stripchart of expression data</h3>
+<p>Using the p-values created by the results of DESeqMatrix created, the expression data filtered for genes associated with the pyruvate metabolic process is ordered by increasing p-values. Nine genes with the lowest p-values from this data is mapped in a strip chart, sorted by gene. The expression for each genotype sample is compared between light and dark conditions. The nine genes displayed are as follows: <em>FBA1, FBA6, GAPA, PGK1, HDR, AT4G25280, PKp3, HKL1, PKP-ALPHA.</em></p>
+<pre class="r"><code>lowestp = data.frame(dssresults[order(dssresults$pvalue), ])
+sorted_data = lgGo[rownames(lowestp), ]
+sorted_data = sorted_data[!is.na(sorted_data), ]
+expression_data = data.frame(sorted_data[1:9, ], check.names = FALSE)
+
+expression_level = stripchart321g(expression_data, sampleAnnotation,
+    geneNames = geneNamesAndDescriptions, colorValues = groupColors)
+print(expression_level)</code></pre>
+<p><img src="/project/project5_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><em>Graph 4: Stripchart of gene expression for the different genotypes in light and dark conditions for the lowest nine p-values</em></p>
+<p>Of the nine genes; <em>FBA1</em> and <em>PKP-ALPHA</em> follow similar trends within each phenotype in light and dark conditions. For the 14B mutants, the expression levels are the same or overlapping. In the case of the 4G mutants, the expression level in the dark condition is higher than the expression in the light condition. The same expression pattern is observed with the COL (WT) samples.</p>
+<p>The genes <em>GAPA</em> and <em>HKL1</em> have similar expression patterns. The 14B mutants are spread with the expression in the light condition being generally higher and dark conditions being lower. There seems to be some overlap in level of expression as well. In the 4G mutants, the expression level of the dark condition mutants are higher than the ones in the light condition. The same expression pattern is observed with the COL (WT) samples however in HKL1, the expression levels are significantly closer than for GAPA.</p>
+<p>The rest of the genes have varying patterns that are broadly similar depending on mutants.</p>
+<p>For the mutant 14B; the expression levels for genes <em>FBA6, PGK1, GAPA</em> and <em>PKp3</em> are high in the light conditions and lower in dark conditions. Genes <em>HDR</em> and <em>AT4G25280</em> have the opposite pattern of expression. <em>FBA1, PKP-ALPHA,</em> and <em>HKL-1</em> show overlapping expression patterns of both conditions.</p>
+<p>Considering the 4G mutants, the expression levels for genes <em>FBA1, FBA6, GAPA, HDR, HKL1</em> and <em>PKP-ALPHA</em> are low in the light conditions and lower in light conditions. <em>PKG1</em> is the only gene that shows the opposite pattern of expression. <em>AT4G25280</em> and <em>PKp3</em> show overlapping expression patterns of both conditions.</p>
+<p>In the COL (WT) samples, the expression levels for genes <em>FBA1, GAPA, HDR, AT4G25280, HKL1</em> and <em>PKP-ALPHA</em> are low in the light conditions and lower in light conditions. <em>PKG1</em> gene has the opposite pattern of expression. <em>FBA6</em> and <em>PKp3</em> show overlapping expression patterns of both conditions.</p>
+<p>A large number of genes with mutant 14B show a high expression in light conditions while the opposite trend is observed with 4G mutants and WT phenotypes where the high expression are in dark conditions. The COL and 4G samples have more genes following the same expression patterns. In conclusion, we observe a stronger relationship in expression patterns in both the whole gene RNA-seq data and the pyruvate metabolic process for the 4G mutants as the WT samples. The general pattern shows lower expression in light conditions and higher expression in dark conditions. In contrast, we can conclude that the 14B mutant affecting the plant specific translation initiation factor, tend to have higher expression patterns in light conditions and lower expression in the dark.</p>
+<p>This project was completed under the guidance of Dr. Wylie during the Principles of Computational Biology (BIO 321G) course of fall 2021. Source code “bio321g_rnaseq_utils.R” and rnaseq data was provided by the course.</p>
+</div>
+
+            
+        <hr>         <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="/js/docs.min.js"></script>
+<script src="/js/main.js"></script>
+
+<script src="/js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>

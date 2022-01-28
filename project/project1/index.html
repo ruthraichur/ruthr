@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Ruth Raichur" />
+    
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico">
+    <title>Evaluating Movies based on the Bechdel Test and Movie Ratings</title>
+    <meta name="generator" content="Hugo 0.92.1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="/projects/">PROJECTS</a></li>
+        
+        <li><a href="/resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="/project/project1/">Evaluating Movies based on the Bechdel Test and Movie Ratings</a></strong>
+          </h3>
+        </div>
+ 
+<div class="blog-title">
+          <h4>
+         October 19, 2020 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<P style="page-break-before: always">
+<div style="page-break-after: always;"></div>
+<div id="project-1-exploratory-data-analysis" class="section level2">
+<h2>Project 1: Exploratory Data Analysis</h2>
+<pre class="r"><code>library(readr)
+next_bechdel_test &lt;- bechdel_test &lt;- read_csv(&quot;SDS 348_bechdel_test.csv&quot;)
+movie_ratings &lt;- read_csv(&quot;IMDB-Movie-Data.csv&quot;)</code></pre>
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<p>The Bechdel test, also known as the Bechdel-Wallace test, is a measure of how women are represented in movies. When it was first created in 1985, there were only 3 critera for a movie to pass the test: 1. the movie must have (at least) two named women in it 2. who talk to each other 3. about something besides men.</p>
+<p>A fivethirtyeight article in 2016 discussed the need to improve the criteria and tested the top 50 movies of 2016 against modern criteria that included BIPOC women inclusion and a minumum female cast and crew percentage. The next_bechdel_test data (found from github) is the data used by fivethirtyeight to run this test. It lists the top 50 movies of 2016 and a few criteria they used to run the test such actor names, character name, role type, gender as as well as whether or not the movie passed the new bechdel test (represented by 1 for yes and 0 for no). The data included other unknown variables that will be cleaned up during the tidying process.</p>
+<p>Comparing the movie ratings between movies that passed and failed the bechdel test will provide us insight as to how well the improved female representation is received by the public. The movie_ratings dataset, pulled from IMDb, lists all movies available on the IMDb website with variable such as genre, release year, average rating and revenue in millions of dollars.</p>
+<p>It will be interesting to analyze the associations like genre and rating with movies that passed the bechdel test. I would imagine that most movies passing the bechdel test would have higher ratings and perhaps be romantic comedies. Additionally, we can determine and compare the overall success of movies based on the revenue and evaluate whether movies that passed the bechdel test faired better in cinemas.</p>
+</div>
+<div id="tidying-rearranging-widelong" class="section level3">
+<h3>Tidying: Rearranging Wide/Long</h3>
+<div id="selecting-data" class="section level5">
+<h5>Selecting data</h5>
+<pre class="r"><code>library(tidyr)
+library(dplyr)
+
+# variable selection#
+bechdel &lt;- next_bechdel_test %&gt;%
+    select(2:5, 7, 8)
+ratings &lt;- movie_ratings %&gt;%
+    select(2, 3, 7, 9, 11)</code></pre>
+</div>
+<div id="untidying-data" class="section level5">
+<h5>Untidying data</h5>
+<pre class="r"><code>bechdel %&gt;%
+    pivot_wider(names_from = &quot;GENDER&quot;, values_from = &quot;bechdel&quot;) -&gt;
+    untidy_bechdel
+ratings %&gt;%
+    pivot_wider(names_from = &quot;Year&quot;, values_from = &quot;Genre&quot;) -&gt;
+    untidy_ratings</code></pre>
+</div>
+<div id="retidying" class="section level5">
+<h5>Retidying</h5>
+<pre class="r"><code>untidy_bechdel %&gt;%
+    pivot_longer(5:8, names_to = &quot;GENDER&quot;, values_to = &quot;bechdel&quot;) %&gt;%
+    na.omit() -&gt; bechdel1
+untidy_ratings %&gt;%
+    pivot_longer(4:14, names_to = &quot;Year&quot;, values_to = &quot;Genre&quot;) %&gt;%
+    na.omit() %&gt;%
+    separate(Genre, into = c(&quot;primary_genre&quot;)) -&gt; ratings1</code></pre>
+<p>While my data was already tidy, it contained many variables that I did not intend on using. I used select() to isolate the variables of interest and then proceeded to untidy and retidy my data. To untidy my next_bechdel_test data, I created columns for each cast member’s gender and indicated whether their respective movie passed or failed the bechdel test in those columns. Similarly, I untidied my movie_ratings dataset by sorting the genres by the release year. After retidying my data, I noticed that multiple genres were listed on a column. Since having multiple genres would possibly complicate things, I picked the first listed genre as the “primary_genre” and used separate() to clean that column.</p>
+</div>
+</div>
+<div id="joiningmerging" class="section level3">
+<h3>Joining/Merging</h3>
+<pre class="r"><code>library(dplyr)
+inner_join(ratings1, bechdel1, by = c(Title = &quot;MOVIE&quot;)) -&gt;
+    bechdel_ratings</code></pre>
+<p>I joined my datasets by movie names to pull all the common movies between the two datasets. Since the variables I wanted to analyze were from both datasets, I used the inner join function to ensure that all the variables from both datasets would be pulled into a new dataset. It appears that data was lost mostly from the movie_ratings dataset during the join since the final joined dataset has 1,682 rows while the two parent datasets had 2,072 and 1,682 rows, this suggests that all movies from the bechdel dataset was preserved and matched with the movies common in the IMDb dataset.</p>
+</div>
+<div id="wrangling" class="section level3">
+<h3>Wrangling</h3>
+<pre class="r"><code>library(dplyr)</code></pre>
+<div id="mutating-to-find-the-proportion-of-female-actors-in-each-movie" class="section level5">
+<h5>Mutating to find the proportion of female actors in each movie:</h5>
+<pre class="r"><code>bechdel_ratings %&gt;%
+    group_by(Title) %&gt;%
+    mutate(allpeople = length(GENDER)) %&gt;%
+    filter(GENDER == &quot;Female&quot;) %&gt;%
+    mutate(female_prop = length(GENDER)/allpeople) %&gt;%
+    select(1:5, 10, 12) %&gt;%
+    arrange(bechdel) %&gt;%
+    distinct() -&gt; by_female_prop</code></pre>
+</div>
+<div id="summary-statisitcs-between-bechdel-passed-and-bechdel-failed" class="section level5">
+<h5>Summary statisitcs between bechdel passed and bechdel failed:</h5>
+<pre class="r"><code>by_female_prop %&gt;%
+    group_by(bechdel) %&gt;%
+    summarise_if(is.numeric, list(min = min, max = max, mean = mean,
+        sd = sd, var = var, n = n_distinct), na.rm = T)</code></pre>
+<pre><code>## # A tibble: 2 × 19
+##   bechdel Rating_min `Revenue (Millions)_min` female_prop_min Rating_max
+##     &lt;dbl&gt;      &lt;dbl&gt;                    &lt;dbl&gt;           &lt;dbl&gt;      &lt;dbl&gt;
+## 1       0        5.3                     0.54          0.185         8.3
+## 2       1        6.3                    65.0           0.0556        8.2
+## # … with 14 more variables: Revenue (Millions)_max &lt;dbl&gt;,
+## #   female_prop_max &lt;dbl&gt;, Rating_mean &lt;dbl&gt;, Revenue (Millions)_mean &lt;dbl&gt;,
+## #   female_prop_mean &lt;dbl&gt;, Rating_sd &lt;dbl&gt;, Revenue (Millions)_sd &lt;dbl&gt;,
+## #   female_prop_sd &lt;dbl&gt;, Rating_var &lt;dbl&gt;, Revenue (Millions)_var &lt;dbl&gt;,
+## #   female_prop_var &lt;dbl&gt;, Rating_n &lt;int&gt;, Revenue (Millions)_n &lt;int&gt;,
+## #   female_prop_n &lt;int&gt;</code></pre>
+</div>
+<div id="quartiles-of-variable-sorted-by-gender" class="section level5">
+<h5>Quartiles of variable sorted by gender:</h5>
+<pre class="r"><code>bechdel_ratings %&gt;%
+    group_by(GENDER) %&gt;%
+    summarise_if(is.numeric, list(q1 = quantile), probs = (0.25)) %&gt;%
+    na.omit()</code></pre>
+<pre><code>## # A tibble: 3 × 4
+##   GENDER  Rating_q1 `Revenue (Millions)_q1` bechdel_q1
+##   &lt;chr&gt;       &lt;dbl&gt;                   &lt;dbl&gt;      &lt;dbl&gt;
+## 1 Female        6.3                    97.7          0
+## 2 Male          6.5                    93.4          0
+## 3 Unknown       6.5                    99.8          0</code></pre>
+<pre class="r"><code>bechdel_ratings %&gt;%
+    group_by(GENDER) %&gt;%
+    summarise_if(is.numeric, list(q2 = quantile), probs = (0.5)) %&gt;%
+    na.omit()</code></pre>
+<pre><code>## # A tibble: 3 × 4
+##   GENDER  Rating_q2 `Revenue (Millions)_q2` bechdel_q2
+##   &lt;chr&gt;       &lt;dbl&gt;                   &lt;dbl&gt;      &lt;dbl&gt;
+## 1 Female        7                      151.          0
+## 2 Male          7.1                    128.          0
+## 3 Unknown       7.1                    151.          0</code></pre>
+<pre class="r"><code>bechdel_ratings %&gt;%
+    group_by(GENDER) %&gt;%
+    summarise_if(is.numeric, list(q3 = quantile), probs = (0.75)) %&gt;%
+    na.omit()</code></pre>
+<pre><code>## # A tibble: 3 × 4
+##   GENDER  Rating_q3 `Revenue (Millions)_q3` bechdel_q3
+##   &lt;chr&gt;       &lt;dbl&gt;                   &lt;dbl&gt;      &lt;dbl&gt;
+## 1 Female       7.6                     234.          1
+## 2 Male         7.6                     234.          1
+## 3 Unknown      7.52                    270.          1</code></pre>
+</div>
+<div id="correlation-matrix" class="section level5">
+<h5>Correlation matrix:</h5>
+<pre class="r"><code>cormat &lt;- cor(by_female_prop[sapply(by_female_prop, is.numeric)],
+    use = &quot;pairwise&quot;)
+cormat</code></pre>
+<pre><code>##                        Rating Revenue (Millions)     bechdel female_prop
+## Rating              1.0000000         0.41789651  0.18222055  -0.1536304
+## Revenue (Millions)  0.4178965         1.00000000  0.05303096  -0.1491694
+## bechdel             0.1822206         0.05303096  1.00000000  -0.4602125
+## female_prop        -0.1536304        -0.14916940 -0.46021251   1.0000000</code></pre>
+<p>I used the mutate function to create a new variable that listed the proportion of female cast members for each movie. I then used that dataset to compare summary statistics between movies that passed the bechdel test and ones that failed. I generated summary statistics of minimum, maximum, mean, standard deviation, variance and number of distinct values for the numeric variables Rating, Revenue and female proportion. The most notable statistics was the difference in mean rating between passed and failed bechdel test movies, movies that failed had an average rating of 6.776 on a 10 scale while movies that passed had a rating of 7.075. Another interesting observation was that the mean female proportion was higher in movies that failed the bechdel test (0.341) compared to the ones that passed (0.222). Of course this comes with the caveat that the standard deviation of female proportion was much greater in movies that failed the test (0.922). Finally, the minimum revenue between the two movie categories were starkly different, the movies that failed bechdel generated a minimum of 0.54 million dollars while the minimum generated by movies that passed was 65.03 million dollars.</p>
+<p>In addition to the summary statistics of the female proportion data, I used the original data set to generate quartiles of the three numeric variables (rating, revenue and bechdel) for movies based on gender. The more females or males a movie would have, the greater they would have affected the quartiles. This allows us to determine weighted quartile values of ratings and revenue. We see that the upper quartile ratings and revenue for movies with males are equal to movies with females while the median revenue generated by movies with males (128.34 M) are surprisingly lower than the median revenue generated by movies with females (151.06 M). A correlation matrix was generated with the female proportion dataset, from this we can see that the are rather weak correlations between rating, revenue, bechdel test and female cast proportions. The highest positive correlation (0.417) is between revenue and movie rating, suggesting higher rated movies incurred higher revenue, while the most negative correlation (-0.460) is between the bechdel test and female proportion, this means a movie that passed the bechdel test has a lower proportion of female cast members in their movie - a surprising observation.</p>
+</div>
+</div>
+<div id="visualizing" class="section level3">
+<h3>Visualizing</h3>
+<div id="correlation-heatmap" class="section level5">
+<h5>Correlation heatmap</h5>
+<pre class="r"><code>library(tidyverse)
+cormat %&gt;%
+    as.data.frame %&gt;%
+    rownames_to_column(&quot;var1&quot;) %&gt;%
+    pivot_longer(-1, names_to = &quot;vars2&quot;, values_to = &quot;correlation&quot;) %&gt;%
+    ggplot(aes(var1, vars2, fill = correlation)) + geom_tile() +
+    geom_text(aes(label = round(correlation, 2)), color = &quot;white&quot;,
+        size = 4) + coord_fixed() + theme(axis.text.x = element_text(angle = 30,
+    size = 9, vjust = 1, hjust = 1))</code></pre>
+<p><img src="/project/project1_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" />
+As mentioned above the correlation matrix, and therefore this heatmap, does not show many strong correlations between any of the four variables. Revenue and Ratings have very weak positive relationships with movies passing the bechdel test while, as discusses above, there is a negative correlation between female cast proportion and bechdel passing movies. Additionally, female proportion has the same weak negative correlation with revenue and ratings sugessting that a higher the female proportion, the lower the revenue and rating of the movie, while the strongest positive correlation is between revenue and ratings.</p>
+</div>
+<div id="plot-1---faceted-histogram-bechdel-movies-passfail-comaprison-by-movie-rating-and-genre" class="section level5">
+<h5>Plot 1 - Faceted histogram: Bechdel movies pass/fail comaprison by movie rating and genre</h5>
+<pre class="r"><code>bechdel.labs &lt;- c(&quot;Bechdel fail&quot;, &quot;Bechdel pass&quot;)
+names(bechdel.labs) &lt;- c(&quot;0&quot;, &quot;1&quot;)
+
+bechdel_ratings %&gt;%
+    ggplot(aes(x = primary_genre, y = Rating, fill = primary_genre)) +
+    facet_wrap(~bechdel, labeller = labeller(bechdel = bechdel.labs)) +
+    geom_bar(stat = &quot;summary&quot;, fun = mean) + scale_y_continuous(name = &quot;Average movie rating&quot;,
+    breaks = seq(0, 10, 2)) + geom_errorbar(stat = &quot;summary&quot;,
+    fun.data = mean_se, width = 0.6) + scale_fill_brewer(palette = 3) +
+    xlab(&quot;Primary genre&quot;) + labs(title = &quot;Average rating by primary genre accoring to bechdel&quot;) +
+    theme(axis.text.x = element_text(angle = 30, size = 9, vjust = 1,
+        hjust = 1))</code></pre>
+<p><img src="/project/project1_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" />
+The plot above evaulates the average movie ratings by genre and whether or not the movie passed the bechdel test. We see that movies that passed the bechdel test were limited to genres of action, adventure, animation and biography. It is surprising that drama is not one of those genres. When comparing the average ratings, we see that biographies faired best in movies that passed the bechdel test while drama and biography were the two best rated genres among movies that failed the bechdel test. Action movies that passed the bechdel test had higher ratings than action movies that failed the test. We see that adventure and animation movies were rated higher among movies that failed the bechdel test compared to those that passed the test.</p>
+</div>
+<div id="plot-2---scatterplot-with-linear-regression-line-comparison-of-bechdel-test-passfail-movies-by-revenue-and-female-proportion" class="section level5">
+<h5>Plot 2 - Scatterplot with linear regression line: Comparison of Bechdel test pass/fail movies by revenue and female proportion</h5>
+<pre class="r"><code>by_female_prop %&gt;%
+    mutate(bechdel2 = recode(bechdel, `0` = &quot;fail&quot;, `1` = &quot;pass&quot;)) %&gt;%
+    ggplot(aes(x = female_prop, y = `Revenue (Millions)`, color = bechdel2)) +
+    geom_point() + geom_smooth(method = lm, aes(color = bechdel2)) +
+    theme_light() + theme(panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank()) + scale_y_continuous(name = &quot;Revenue (Millions)&quot;,
+    breaks = seq(0, 500, 50)) + scale_x_continuous(name = &quot;Proportion of female cast&quot;,
+    breaks = seq(0, 1, 0.1)) + labs(title = &quot;Revenue based on proportion of female cast according to bechdel test&quot;)</code></pre>
+<p><img src="/project/project1_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" />
+This scatter plot compares the revenue of the movie by proportion of female cast. A linear regression line shows the trends of these variable of movies that passed and failed the bechdel test. We see that while bechdel passing movies have lower proportions of female cast, the revenue increases as the proportion increase. In contrast, the movies that failed the bechdel test had higher proportion of female cast member but with decreasing revenue as that proportion increased. This graphs also indicates that most movies have a female proportion between a 0.2 and a 0.4 and a revenue between 150 and 250 million regardless of whether or not they passed the bechdel test.</p>
+</div>
+</div>
+<div id="dimensionality-reduction" class="section level3">
+<h3>Dimensionality Reduction</h3>
+<div id="principal-component-analysis" class="section level5">
+<h5>Principal Component Analysis</h5>
+<pre class="r"><code># pca#
+library(tidyverse)
+
+# scaling data#
+bechdel3 &lt;- bechdel_ratings %&gt;%
+    mutate(bechdel2 = recode(bechdel, `0` = &quot;fail&quot;, `1` = &quot;pass&quot;))
+
+bechdel_nums &lt;- bechdel3 %&gt;%
+    select_if(is.numeric) %&gt;%
+    scale
+rownames(bechdel_nums) &lt;- bechdel_ratings$Title
+bechdel_pca &lt;- princomp(bechdel_nums)
+names(bechdel_pca)</code></pre>
+<pre><code>## [1] &quot;sdev&quot;     &quot;loadings&quot; &quot;center&quot;   &quot;scale&quot;    &quot;n.obs&quot;    &quot;scores&quot;   &quot;call&quot;</code></pre>
+<pre class="r"><code># summarizing results#
+summary(bechdel_pca, loadings = T)</code></pre>
+<pre><code>## Importance of components:
+##                          Comp.1    Comp.2    Comp.3
+## Standard deviation     1.103137 1.0014262 0.8822953
+## Proportion of Variance 0.405879 0.3344844 0.2596366
+## Cumulative Proportion  0.405879 0.7403634 1.0000000
+## 
+## Loadings:
+##                    Comp.1 Comp.2 Comp.3
+## Rating              0.710         0.704
+## Revenue (Millions)  0.607 -0.514 -0.606
+## bechdel             0.357  0.858 -0.370</code></pre>
+<pre class="r"><code># determining how many PC&#39;s to keep#
+eigval &lt;- bechdel_pca$sdev^2  #square to convert SDs to eigenvalues#
+varprop = round(eigval/sum(eigval), 2)  #proportion of var explained by each PC#
+
+ggplot() + geom_bar(aes(y = varprop, x = 1:3), stat = &quot;identity&quot;) +
+    xlab(&quot;&quot;) + geom_path(aes(y = varprop, x = 1:3)) + geom_text(aes(x = 1:3,
+    y = varprop, label = round(varprop, 2)), vjust = 1, col = &quot;white&quot;,
+    size = 5) + scale_y_continuous(breaks = seq(0, 0.6, 0.2),
+    labels = scales::percent) + scale_x_continuous(breaks = 1:10)</code></pre>
+<p><img src="/project/project1_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># plotting a biplot#
+bechdel_pca$loadings[1:3, 1:2] %&gt;%
+    as.data.frame %&gt;%
+    rownames_to_column %&gt;%
+    ggplot() + geom_hline(aes(yintercept = 0), lty = 2) + geom_vline(aes(xintercept = 0),
+    lty = 2) + ylab(&quot;PC2&quot;) + xlab(&quot;PC1&quot;) + geom_segment(aes(x = 0,
+    y = 0, xend = Comp.1, yend = Comp.2), arrow = arrow(), col = &quot;blue&quot;,
+    size = 2) + geom_label(aes(x = Comp.1 * 0.9, y = Comp.2 +
+    0.1, label = rowname)) + theme_light()</code></pre>
+<p><img src="/project/project1_files/figure-html/unnamed-chunk-14-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># histogram shows we need to keep all three# graphing PC1
+# against PC2 and PC2 against PC3#
+
+results &lt;- bechdel3 %&gt;%
+    as.data.frame %&gt;%
+    mutate(PC1 = bechdel_pca$scores[, 1], PC2 = bechdel_pca$scores[,
+        2], PC3 = bechdel_pca$scores[, 3])
+
+results %&gt;%
+    ggplot(aes(PC1, PC2, color = bechdel2, shape = primary_genre)) +
+    geom_point(size = 4)</code></pre>
+<p><img src="/project/project1_files/figure-html/unnamed-chunk-14-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>results %&gt;%
+    ggplot(aes(PC2, PC3, color = bechdel2, shape = primary_genre)) +
+    geom_point(size = 4)</code></pre>
+<p><img src="/project/project1_files/figure-html/unnamed-chunk-14-4.png" width="672" style="display: block; margin: auto;" />
+The PCA describes my data by analyzing the variables with the most variation to helps us better understand underlying trends. After standardizing my data and converting my standard deviations to eigen values, I graphed the proportion of variation explained by each principle component. This graph showed that PC1 only accounted for 40%, PC2 for 33% and PC3 for 26% of the variation, this suggests that I would need to evaluate all three principle components as they all have underlying trend since components 1 and 2 only accounted for 74% of the total variance. Since all the PC1 variables are positive, it suggests that all of the variables are slightly correlated. The biplot confirms that all three of my numerical variables are weakly correlated with revenue and bechdel pass/fail being the weakest relationship. It also shows that ratings have the least underlying variation between groups, suggesting the effect of rating on the trends is weak. It also suggests that PC2 does the best job at explaining the variation. Using this information, we can compare the eigen values of comp 2 to see that the bechdel passing/failing status (0.858) affected my data the most, which is to be expected. The high PC2 values means a passing bechdel but low revenue while the low PC2 value (-0.514) suggests a high revenue but a failing bechdel test. Interpreting the PC3 values the same way, a high PC3 value meanse high rating, low revenue and failing bechdel while a low PC3 means a passed bechdel, high revenue and a low rating.</p>
+<p>After graphing PC1 against PC2, and PC2 against PC3, we can see that movies that passed and failed the bechdel test are distinctly separated when spread on the scatter plot. In contrast, when shaped by genre, we see that genre lacks any underlying trend while we do observe that some genres that are in the failed bechdel test group are not in the pass bechdel test group. From the graphs, it appears that PC2 does a better job at separating the movies based on their bechdel test compared to PC1 or PC3.</p>
+<p>…</p>
+</div>
+</div>
+</div>
+
+            
+        <hr>         <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="/js/docs.min.js"></script>
+<script src="/js/main.js"></script>
+
+<script src="/js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>
