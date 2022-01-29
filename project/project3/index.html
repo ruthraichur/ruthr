@@ -41,6 +41,8 @@
         
         <li><a href="/projects/">PROJECTS</a></li>
         
+        <li><a href="/post/">RESEARCH</a></li>
+        
         <li><a href="/resume/">RESUME</a></li>
         
       
@@ -68,6 +70,7 @@
           <div class="panel-body">
             <div class="blogpost">
               
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
 <P style="page-break-before: always">
@@ -99,14 +102,15 @@
 </div>
 <div id="graphical" class="section level2">
 <h2>Graphical</h2>
-<p>Table 1: Custom tracks from UCSC Genome Browser used for analysis.
-<em>“User Track” is the intersection track created between the Gli3 sites and HH responsive H3K27ac sites that show 280 sites. “Gli_Limb_Binding_Endogenous_mm10” is track mapping the 7282 Gli3 binding regions on the mouse genome while the “HH_responsive_H3K27ac_mm10” shows the Chip-Seq data mapping the 2113 hedgehog responsive H3K27 acetylated binding regions on the same genome both obtained from Lex et al, 2020.</em>
-<img src="/project/project3_files/project3img1.jpg" /></p>
-<p>Figure 1: Graphs a, b and c describing locations of GBRs from TSS of target genes identified. <em>Graph a shows number of associated genes per region, 80% of regions have 2 associated genes. Graph b shows the region-gene associations based on orientation and distance of the GBRs to the transcription start site (TSS) of each target gene, mostly located +/- 50 to 500kb. Graph c shows describes the same data as graph b but in absolute distance to the TSS, majority between 50 to 500 kb.</em>
-<img src="/project/project3_files/project3img2.jpg" /></p>
-<p>Figure 2: Confirming <em>Osr2</em> likelihood of being a Gli3 target gene.
-<em>Using UCSC Genome Browser to visualize positions of Osr2 relative to Gli limb binding regions and HH responsive regions. Track colored in red indicates Gli3 limb binding region, track colored in green is hedgehog responsive region. The two black track indicates location of Osr2 gene with promoter region and without.</em>
-<img src="/project/project3_files/project3img3.jpg" /></p>
+<p><strong>Table 1: Custom tracks from UCSC Genome Browser used for analysis.</strong>
+<img src="/project/project3_files/project3img1.jpg" />
+<em>“User Track” is the intersection track created between the Gli3 sites and HH responsive H3K27ac sites that show 280 sites. “Gli_Limb_Binding_Endogenous_mm10” is track mapping the 7282 Gli3 binding regions on the mouse genome while the “HH_responsive_H3K27ac_mm10” shows the Chip-Seq data mapping the 2113 hedgehog responsive H3K27 acetylated binding regions on the same genome both obtained from Lex et al, 2020.</em></p>
+<p><strong>Figure 1: Graphs a, b and c describing locations of GBRs from TSS of target genes identified.</strong>
+<img src="/project/project3_files/project3img2.jpg" />
+<em>Graph a shows number of associated genes per region, 80% of regions have 2 associated genes. Graph b shows the region-gene associations based on orientation and distance of the GBRs to the transcription start site (TSS) of each target gene, mostly located +/- 50 to 500kb. Graph c shows describes the same data as graph b but in absolute distance to the TSS, majority between 50 to 500 kb.</em></p>
+<p><strong>Figure 2: Confirming <em>Osr2</em> likelihood of being a Gli3 target gene.</strong>
+<img src="/project/project3_files/project3img3.jpg" />
+<em>Using UCSC Genome Browser to visualize positions of Osr2 relative to Gli limb binding regions and HH responsive regions. Track colored in red indicates Gli3 limb binding region, track colored in green is hedgehog responsive region. The two black track indicates location of Osr2 gene with promoter region and without.</em></p>
 <p>UCSC Genome Browser mapping two datasets from Lex et al, 2020 <a href="https://genome.ucsc.edu/s/ruthraichur/Gli3%20limb%20binding%20endogenous_mm10"> Session Link </a></p>
 <p>UCSC Genome Browser mapping the intersection: <a href = http://genome.ucsc.edu/s/ruthraichur/Gli3_HH_intersection> Session Link </a></p>
 <p>This project was completed under the guidance of Dr. Vokes during the Human Genetics (BIO 325T) course of spring 2021.</p>
@@ -132,7 +136,7 @@
 <p>Table 2: Potential Nearby Gli3 Target Genes and their chromosomal coordinates.</p>
 <p><em>All genomic region-gene association table for the Gli3-H3K27ac intersection. GREAT was unable to provide chromosomal positions (“unnamed”) however, coordinates to the TSS were provided.</em></p>
 <pre class="r"><code>library(readr)
-genomic_regions &lt;- read_csv(&quot;/Users/ruthraichur/Desktop/website/content/project/project3.csv&quot;)
+genomic_regions &lt;- read_csv(&quot;/Users/ruthraichur/Desktop/website2/content/project/project3.csv&quot;)
 data.frame(genomic_regions)</code></pre>
 <pre><code>##             Gene                                                Position
 ## 1  1600014C23Rik   unnamed (-203356), unnamed (-23606), unnamed (-22681)

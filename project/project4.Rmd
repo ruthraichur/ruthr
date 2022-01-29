@@ -53,25 +53,30 @@ A further point of inquiry would be establishing the true mechanism by which thi
 The apparent indirect interactions through *Myod1* between cell fate determining genes *Myocd* and *Chd2* in skeletal muscle phenotypes needs to be studied to confirm the true nature of the effects on these gene on the observed phenotypes. This could be approached by studying topologically associated domains (TADs) of these three genes using Hi-C data that would highlight any interactions between these genes. The analysis of the interacting domains in the patient to confirm whether these mutations affect the interactions of *Myocd* and *Chd2* with *Myod1* would strengthen this conclusion. In addition, understanding the structural changes of the proteins caused by these mutations would further build the mechanism by which these interactions have been affected and confirm genetic basis of the observed phenotypes seen in this patient. 
 
 ## Graphical
-Figure 1: Decipher track of patient missense variant on gene *Chd2*. 
-*Missense mutation is highlighted G>A. Missense constraint range shown to be less intolerant. The bottom of the image shows the highly conserved amino acid sequence of this gene across species.*
+**Figure 1: Decipher track of patient missense variant on gene *Chd2*.**
 ![](/project/project4_files/project4img1.jpg)
+*Missense mutation is highlighted G>A. Missense constraint range shown to be less intolerant. The bottom of the image shows the highly conserved amino acid sequence of this gene across species.*
 
-Figure 2: Decipher track of patient missense variant on gene *Myocd*. 
-*Missense mutation is highlighted C>T. Missense constraint range shown to be more intolerant. The bottom of the image shows the conserved amino acid sequence of this gene across species.*
+
+**Figure 2: Decipher track of patient missense variant on gene *Myocd*.** 
 ![](/project/project4_files/project4img2.jpg)
+*Missense mutation is highlighted C>T. Missense constraint range shown to be more intolerant. The bottom of the image shows the conserved amino acid sequence of this gene across species.*
 
-Figure 3: UCSC Genome Browser view of gene *Chd2*. 
-*Genome Browser includes SNP data showing another missense mutation at the same position (15:93000537). The synonymous mutations are indicated by green SNPs and missense mutations indicated by yellow SNPs.*
+
+**Figure 3: UCSC Genome Browser view of gene *Chd2*.**
 ![](/project/project4_files/project4img3.jpg)
- 
-Figure 4: UCSC Genome Browser view of gene *Myocd*. 
-*Genome Browser includes SNP data showing another missense mutation around same position (17:12752657 - 17:12752658). The synonymous mutations are indicated by green SNPs and missense mutations indicated by yellow SNPs.*
-![](/project/project4_files/project4img4.jpg)
+*Genome Browser includes SNP data showing another missense mutation at the same position (15:93000537). The synonymous mutations are indicated by green SNPs and missense mutations indicated by yellow SNPs.*
 
-Figure 5: gnomAD data of analysis of sequence variants in *Chd2* (left) and *Myocd* (right) gene from Decipher. 
-*The data shows the occurrence of the specific alleles of these genes in different populations. No homozygotes appear to be observed in both gene studies. The sample size of these studies are indicated in the total allele number - 152096 for CHD2 and 152212 in *Myocd*.*
+ 
+**Figure 4: UCSC Genome Browser view of gene *Myocd*.**
+![](/project/project4_files/project4img4.jpg)
+*Genome Browser includes SNP data showing another missense mutation around same position (17:12752657 - 17:12752658). The synonymous mutations are indicated by green SNPs and missense mutations indicated by yellow SNPs.*
+
+
+**Figure 5: gnomAD data of analysis of sequence variants in *Chd2* (left) and *Myocd* (right) gene from Decipher.**
 ![](/project/project4_files/project4img5.png)
+*The data shows the occurrence of the specific alleles of these genes in different populations. No homozygotes appear to be observed in both gene studies. The sample size of these studies are indicated in the total allele number - 152096 for CHD2 and 152212 in *Myocd*.*
+
 This project was completed under the guidance of Dr. Vokes during the Human Genetics (BIO 325T) course of spring 2021.
 
 ## References 
