@@ -1,0 +1,15 @@
+---
+title: How a Selfish DNA Element Hitchikes onto Chromosomes
+author: Ruth Raichur
+date: '2022-01-29'
+slug: how-a-selfish-dna-hitchikes-onto-chromosomes
+categories: []
+tags: []
+description: ''
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
+# coming soon
