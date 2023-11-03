@@ -74,19 +74,13 @@ The RNA-seq data consists of sample genotypes with the following description mat
     </item>
     
     <item>
-      <title>Projects</title>
+      <title>Publications and Projects</title>
       <link>/projects/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/projects/</guid>
-      <description>Check out some of my coding projects below:
- Wrangling &amp;amp; Exploratory Data Analysis
- Modeling, Inference, Prediction
- RNA-Seq Project
-Check out some of my research projects below:
- UCSC Genome Browser: Identifying direct transcriptional targets of Hedgehog signaling in limb development
- Decipher Patient Case Study
- Reversing the effects of hypermethylation on BRCA1 by CRISPR/Cas9 technology   --</description>
+      <description>Publications:
+Liu, S.* &amp;amp;, Friedrich, M.* &amp;amp; ,  Raichur, R. * , Gong, D., Kehl, N., Gong, Q., Schmidt, V., Gustafsson, K., Ma, L., Scadden, D., Zhang, F., Chen, F.&amp;amp; Spatiotemporal dynamics of the thymus reveal changes underlying immune decline and regeneration.  In Preparation  (2023) *Equally contributing authors &amp;amp; Co-corresponding authors Russell, A.J.C.* , Weir, J.A.* , Nadaf, N.M.* , Shabet, M., Kumar, V., Kambhampati, S.</description>
     </item>
     
     <item>

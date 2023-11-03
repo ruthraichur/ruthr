@@ -1,21 +1,22 @@
 ---
-title: "Projects"
+title: "Publications and Projects"
 output: html_document
 hidedate: true
 hiderelated: true
 hidediscus: true
 ---
-Publications:
-Liu, S.*\textsuperscript{\#}, Friedrich, M.*, \underline{\bf Raichur, R.*}, Gong, D., Kehl, N., Gong, Q., Schmidt, V., Gustafsson, K., Ma, Larissa L., Scadden, D., Zhang, F., Chen, F.\textsuperscript{\#}  Spatiotemporal dynamics of the thymus reveal changes underlying immune decline and regeneration. \underline{\em In Preparation} (2023)
+**Publications:**
 
-Ounadjela, J.R., Zhang, K., Kobayash-Kirschvink, K., Jin, K., Russell, A.J.C., Lackner, A., Callahan, C., Viggiani, F., Dey, K., Jagadeesh, K., Maxian, T., Prandstetter, A.M., Nadaf, N., Gong Q., \underline{\bf Raichur, R.}, Zvezdov, M., Hui, M., Simpson, M., Liu, X., Min, W., Knöfler, M., Chen, F.\textsuperscript{\#}, Haider, S.\textsuperscript{\#}, Shu, J.\textsuperscript{\#}  Spatial multiomic landscape of the human placenta at molecular resolution. {\underline{\em Submitted to Nature}} (2023)
+Liu, S.* ^&^, Friedrich, M.* ^&^ , **<u> Raichur, R. * </u>**, Gong, D., Kehl, N., Gong, Q., Schmidt, V., Gustafsson, K., Ma, L., Scadden, D., Zhang, F., Chen, F.^&^ Spatiotemporal dynamics of the thymus reveal changes underlying immune decline and regeneration. <u> *In Preparation* </u>  (2023)
+<font size="1"> *Equally contributing authors  ^&^ Co-corresponding authors </font size="1">
 
-Russell, A.J.C.*, Weir, J.A.*, Nadaf, N.M.*, Shabet, M., Kumar, V., Kambhampati, S., \underline{\bf Raichur, R.}, Marrero, G.J. Liu, S., Balderrama, K.S., Vanderburg, C.R., Shanmugam, V., Tian, L., Wu, C.J., Yoon, C.H., Macosko, E.Z.\textsuperscript{\# \&}, Chen, F.\textsuperscript{\# \&}  Slide-tags: scalable, single-nucleus barcoding for multi-modal spatial genomics.{\underline{\em Accepted in Nature}} (2023)
+Russell, A.J.C.* , Weir, J.A.* , Nadaf, N.M.* , Shabet, M., Kumar, V., Kambhampati, S., **<u> Raichur, R. </u>** , Marrero, G.J. Liu, S., Balderrama, K.S., Vanderburg, C.R., Shanmugam, V., Tian, L., Wu, C.J., Yoon, C.H., Macosko, E.Z.^&^, Chen, F.^&^  Slide-tags: scalable, single-nucleus barcoding for multi-modal spatial genomics. <u> *Nature, in press* </u> ([Biorxiv](https://www.biorxiv.org/content/10.1101/2023.04.01.535228v1), 2023)
+<font size="1"> *Equally contributing authors  ^&^ Co-corresponding authors </font size="1">
 
-Sophia Liu, Ruth Raichur, Fei Chen 2023. Slide-TCR-Seq v3 (IVT). 
-\href{https://dx.doi.org/10.17504/protocols.io.n92ldp6w8l5b/v2}{\underline{\em protocols.io}} (2023) \
+Sophia Liu,**<u> Raichur, R. * </u>**, Fei Chen [Slide-TCR-Seq v3 (IVT)](https://dx.doi.org/10.17504/protocols.io.n92ldp6w8l5b/v2) <u> *protocols.io*</u> (2023)
 
-Check out some of my coding projects below:
+
+**Check out some of my undergraduate coding projects:**
 
 <i class="fa fa-signal"></i> &nbsp; [Wrangling & Exploratory Data Analysis](/project/project1/)
 
@@ -23,7 +24,7 @@ Check out some of my coding projects below:
 
 <i class="fa fa-th" aria-hidden="true"></i> &nbsp; [RNA-Seq Project](/project/project5/)
 
-Check out some of my research projects below:
+**Check out some of my undergraduate research projects:**
 
 <i class="fa fa-tasks"></i> &nbsp; [UCSC Genome Browser: Identifying direct transcriptional targets of Hedgehog signaling in limb development](/project/project3/)
 
