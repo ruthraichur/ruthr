@@ -5,6 +5,15 @@ hidedate: true
 hiderelated: true
 hidediscus: true
 ---
+Publications:
+Liu, S.*\textsuperscript{\#}, Friedrich, M.*, \underline{\bf Raichur, R.*}, Gong, D., Kehl, N., Gong, Q., Schmidt, V., Gustafsson, K., Ma, Larissa L., Scadden, D., Zhang, F., Chen, F.\textsuperscript{\#}  Spatiotemporal dynamics of the thymus reveal changes underlying immune decline and regeneration. \underline{\em In Preparation} (2023)
+
+Ounadjela, J.R., Zhang, K., Kobayash-Kirschvink, K., Jin, K., Russell, A.J.C., Lackner, A., Callahan, C., Viggiani, F., Dey, K., Jagadeesh, K., Maxian, T., Prandstetter, A.M., Nadaf, N., Gong Q., \underline{\bf Raichur, R.}, Zvezdov, M., Hui, M., Simpson, M., Liu, X., Min, W., Knöfler, M., Chen, F.\textsuperscript{\#}, Haider, S.\textsuperscript{\#}, Shu, J.\textsuperscript{\#}  Spatial multiomic landscape of the human placenta at molecular resolution. {\underline{\em Submitted to Nature}} (2023)
+
+Russell, A.J.C.*, Weir, J.A.*, Nadaf, N.M.*, Shabet, M., Kumar, V., Kambhampati, S., \underline{\bf Raichur, R.}, Marrero, G.J. Liu, S., Balderrama, K.S., Vanderburg, C.R., Shanmugam, V., Tian, L., Wu, C.J., Yoon, C.H., Macosko, E.Z.\textsuperscript{\# \&}, Chen, F.\textsuperscript{\# \&}  Slide-tags: scalable, single-nucleus barcoding for multi-modal spatial genomics.{\underline{\em Accepted in Nature}} (2023)
+
+Sophia Liu, Ruth Raichur, Fei Chen 2023. Slide-TCR-Seq v3 (IVT). 
+\href{https://dx.doi.org/10.17504/protocols.io.n92ldp6w8l5b/v2}{\underline{\em protocols.io}} (2023) \
 
 Check out some of my coding projects below:
 
