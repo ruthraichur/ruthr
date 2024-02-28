@@ -7,11 +7,11 @@ hidediscus: true
 ---
 **Publications:**
 
-Liu, S.* ^&^, Friedrich, M.* ^&^ , **<u> Raichur, R. * </u>**, Gong, D., Kehl, N., Gong, Q., Schmidt, V., Gustafsson, K., Ma, L., Scadden, D., Zhang, F., Chen, F.^&^ Spatiotemporal dynamics of the thymus reveal changes underlying immune decline and regeneration. <u> *In Preparation* </u>  (2023)
 <font size="1"> *Equally contributing authors  ^&^ Co-corresponding authors </font size="1">
 
+Liu, S.* ^&^, Friedrich, M.* ^&^ , **<u> Raichur, R. * </u>**, Gong, D., Kehl, N., Gong, Q., Schmidt, V., Gustafsson, K., Ma, L., Scadden, D., Zhang, F., Chen, F.^&^ Spatiotemporal dynamics of the thymus reveal changes underlying immune decline and regeneration. <u> *In Preparation* </u>  (2023)
+
 Russell, A.J.C.* , Weir, J.A.* , Nadaf, N.M.* , Shabet, M., Kumar, V., Kambhampati, S., **<u> Raichur, R. </u>** , Marrero, G.J. Liu, S., Balderrama, K.S., Vanderburg, C.R., Shanmugam, V., Tian, L., Wu, C.J., Yoon, C.H., Macosko, E.Z.^&^, Chen, F.^&^  Slide-tags: scalable, single-nucleus barcoding for multi-modal spatial genomics. <u> *Nature, in press* </u> ([Biorxiv](https://www.biorxiv.org/content/10.1101/2023.04.01.535228v1), 2023)
-<font size="1"> *Equally contributing authors  ^&^ Co-corresponding authors </font size="1">
 
 Sophia Liu,**<u> Raichur, R. * </u>**, Fei Chen [Slide-TCR-Seq v3 (IVT)](https://dx.doi.org/10.17504/protocols.io.n92ldp6w8l5b/v2) <u> *protocols.io*</u> (2023)
 
